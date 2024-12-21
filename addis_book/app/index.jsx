@@ -3,7 +3,7 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import images from "../constants/images";
-
+import { router } from "expo-router";
 const index = () => {
   return (
     <>
@@ -22,14 +22,14 @@ const index = () => {
           </View>
         </View>
         <View className="my-8 mx-4">
-          <TouchableOpacity className=" bg-white p-6 rounded-full mt-4 w-full shadow-lg shadow-black ">
-            <Text className="text-black text-4xl  text-center font-primaryBlackItalic">
+          <TouchableOpacity onPress={()=>router.push('/login')} className=" bg-white p-6 rounded-full mt-4 w-full shadow-lg shadow-black ">
+            <Text  className="text-black text-4xl  text-center font-primaryBlackItalic">
               Get Started
             </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-      <StatusBar backgroundColor="#fb923c" style="light" />
+      <StatusBar  style="auto" />
     </>
   );
 };

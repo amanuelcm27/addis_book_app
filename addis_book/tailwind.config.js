@@ -4,6 +4,9 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      backgroundColor:{
+        primary: "#FF9100",
+      },
       fontFamily: {
         primaryRegular: ["NotoSansRegular", "sans-serif"],
         primaryBlack: ["NotoSansBlack", "sans-serif"],
