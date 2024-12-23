@@ -1,7 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import {
- 
   faBell,
   faHouse,
   faUser,
@@ -11,7 +10,10 @@ import {
   faAnglesRight,
   faCirclePlus,
   faEye,
-  faEyeSlash
+  faEyeSlash,
+  faHeadphones,
+  faBookOpen,
+  faGear
 } from '@fortawesome/free-solid-svg-icons';
 
 export const setupIcons = () => {
@@ -26,6 +28,9 @@ export const setupIcons = () => {
     faAnglesRight,
     faCirclePlus,
     faEye,
-    faEyeSlash
+    faEyeSlash,
+    faHeadphones,
+    faBookOpen,
+    faGear
   );
 };

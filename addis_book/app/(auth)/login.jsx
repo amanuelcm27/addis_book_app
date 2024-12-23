@@ -4,7 +4,6 @@ import { View, Text, Image, TouchableOpacity,   KeyboardAvoidingView,
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import FormField from "../../components/FormField";
 import { router } from "expo-router";
 import Button from "../../components/Button";
@@ -48,11 +47,11 @@ const login = () => {
             <Button
               text={"Sign in"}
               isLoading={isLoading}
-              onClick={() => setIsLoading(!isLoading)}
+              onClick={() => router.push("/audio")}
             />
             <View>
               <Text className="text-white font-primaryLight">
-                Already have an account?{" "}
+                Don't have an account?{" "}
                 <Text
                   onPress={() => router.push("/register")}
                   className="font-primaryBlack"

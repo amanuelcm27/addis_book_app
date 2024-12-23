@@ -1,12 +1,84 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text } from "react-native";
+import React from "react";
+import { Tabs } from "expo-router";
+import { TabBar } from "../../components/TabBar";
+import TabIcon from "../../components/TabIcon";
 
 const TabLayout = () => {
   return (
-    <View>
-      <Text>TabLayout</Text>
-    </View>
-  )
-}
+    <Tabs tabBar={(props) => <TabBar {...props} />}>
+      <Tabs.Screen
+        name="home"
+        options={{
+          headerShown: true,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon
+              color={color}
+              focused={focused}
+              icon={"fa-house"}
+              name="Home"
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="audio"
+        options={{
+          headerShown: true,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon
+              color={color}
+              focused={focused}
+              icon={"fa-headphones"}
+              name="Audio"
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="search"
+        options={{
+          headerShown: true,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon
+              color={color}
+              focused={focused}
+              icon={"fa-magnifying-glass"}
+              name="Search"
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="ebook"
+        options={{
+          headerShown: true,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon
+              color={color}
+              focused={focused}
+              icon={"fa-book-open"}
+              name="Ebook"
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="setting"
+        options={{
+          headerShown: true,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon
+              color={color}
+              focused={focused}
+              icon={"fa-gear"}
+              name="setting"
+            />
+          ),
+        }}
+      />
+    </Tabs>
+  );
+};
 
 export default TabLayout;
