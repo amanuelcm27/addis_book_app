@@ -10,7 +10,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="home"
         options={{
-          headerShown: true,
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
               color={color}

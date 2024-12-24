@@ -47,7 +47,7 @@ const login = () => {
             <Button
               text={"Sign in"}
               isLoading={isLoading}
-              onClick={() => router.push("/audio")}
+              onClick={() => router.push("/home")}
             />
             <View>
               <Text className="text-white font-primaryLight">

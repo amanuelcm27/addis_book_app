@@ -13,7 +13,8 @@ import {
   faEyeSlash,
   faHeadphones,
   faBookOpen,
-  faGear
+  faGear,
+  faBars,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const setupIcons = () => {
@@ -31,6 +32,7 @@ export const setupIcons = () => {
     faEyeSlash,
     faHeadphones,
     faBookOpen,
-    faGear
+    faGear,
+    faBars
   );
 };
