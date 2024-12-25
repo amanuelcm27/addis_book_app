@@ -1,22 +1,34 @@
 import { View, Text, Image } from "react-native";
-
+import * as Animatable from "react-native-animatable";
 import React from "react";
+const zoomIn = {
+  0: {
+    scale: 0.9,
+  },
 
-const LargeBookCard = ({ source }) => {
+  1: {
+    scale: 1,
+  },
+};
+const zoomOut = {
+  0: {
+    scale: 1,
+  },
+
+  1: {
+    scale: 0.9,
+  },
+};
+const LargeBookCard = ({ activeItem, item }) => {
   return (
-    <View
-      className="h-[300px] w-[200px] rounded-xl bg-white "
-      style={{
-        shadowOffset: { width: 5, height: 0 },
-        shadowColor: "black",
-        shadowOpacity: 1,
-        shadowRadius: 5,
-        elevation: 5,
-        zIndex: 1,
-      }}
+    <Animatable.View
+      animation={activeItem === item.id ? zoomIn : zoomOut}
+      duration={500}
     >
-      <Image className="w-full h-full rounded-xl" source={source} />
-    </View>
+      <View className="h-[300px] w-[200px]  rounded-xl bg-white ">
+        <Image className="w-full h-full rounded-xl" source={item.imageSource} />
+      </View>
+    </Animatable.View>
   );
 };
 

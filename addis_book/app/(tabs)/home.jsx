@@ -13,6 +13,8 @@ import images from "../../constants/images";
 import * as Animatable from "react-native-animatable";
 import SmallBookCard from "../../components/SmallBookCard";
 import LargeBookCard from "../../components/LargeBookCard";
+import BookCardContainer from "../../components/BookCardContainer";
+import { StatusBar } from "expo-status-bar";
 
 const Home = () => {
   const [isPressed, setIsPressed] = useState(false);
@@ -35,94 +37,55 @@ const Home = () => {
 
   return (
     <SafeAreaView className="h-full">
-      <ScrollView >
-        <View
-          className="bg-primary flex-row h-[100px] items-center p-4"
-          style={{
-            shadowOffset: { width: 5, height: 5 },
-            shadowColor: "black",
-            shadowOpacity: 1,
-            shadowRadius: 5,
-            elevation: 6,
-            zIndex: 1,
-          }}
+      <View
+        className="bg-primary flex-row h-[100px] items-center p-4"
+        style={{
+          shadowOffset: { width: 5, height: 5 },
+          shadowColor: "black",
+          shadowOpacity: 1,
+          shadowRadius: 5,
+          elevation: 10,
+          zIndex: 1,
+        }}
+      >
+        <Animatable.View
+          animation={isPressed ? "rotate" : "swing"}
+          duration={500}
         >
-          <Animatable.View
-            animation={isPressed ? "rotate" : "swing"}
-            duration={500}
+          <TouchableOpacity
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
+            activeOpacity={0.6}
           >
-            <TouchableOpacity
-              onPressIn={handlePressIn}
-              onPressOut={handlePressOut}
-              activeOpacity={0.6}
-            >
-              <FontAwesomeIcon icon="fa-bars" color="white" size={32} />
-            </TouchableOpacity>
-          </Animatable.View>
-          <View className="ml-auto">
-            <Image source={images.logo} className="w-24 h-24" />
-          </View>
+            <FontAwesomeIcon icon="fa-bars" color="white" size={32} />
+          </TouchableOpacity>
+        </Animatable.View>
+        <View className="ml-auto">
+          <Image source={images.logo} className="w-24 h-24" />
         </View>
-
-        <View className="flex-row w-full flex-wrap my-6 justify-between gap-2 p-2">
+      </View>
+      <ScrollView>
+        <View className="flex-row w-full flex-wrap my-6 gap-2 justify-between  p-2">
           <SmallBookCard imageSource={images.animal} title="Animal Farm" />
-          <SmallBookCard imageSource={images.atlas} title="Atlas" width="45%" />
+          <SmallBookCard imageSource={images.atlas} title="Atlas" />
           <SmallBookCard imageSource={images.got} title="Game of Thrones" />
           <SmallBookCard
             imageSource={images.htw}
             title="How to Win Friends and Influence People"
-            width="45%"
           />
           <SmallBookCard imageSource={images.unscripted} title="Unscripted" />
-          <SmallBookCard imageSource={images.atlas} title="Atlas" width="45%" />
+          <SmallBookCard imageSource={images.atlas} title="Atlas" />
         </View>
 
-        <View className="mx-2">
-          <Text className="font-primaryBlack text-4xl mb-4">Trending</Text>
-          <FlatList
-            data={trendingBooks}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <LargeBookCard source={item.imageSource} />
-            )}
-            horizontal 
-            showsHorizontalScrollIndicator={false} 
-            contentContainerStyle={{
-              gap: 16, 
-            }}
-          />
-        </View>
-        <View className="mx-2 my-4">
-          <Text className="font-primaryBlack text-4xl mb-4">Latest</Text>
-          <FlatList
-            data={trendingBooks}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <LargeBookCard source={item.imageSource} />
-            )}
-            horizontal 
-            showsHorizontalScrollIndicator={false} 
-            contentContainerStyle={{
-              gap: 4, 
-            }}
-          />
-        </View>
-        <View className="mx-2 my-4">
-          <Text className="font-primaryBlack text-4xl mb-4">Recommended</Text>
-          <FlatList
-            data={trendingBooks}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <LargeBookCard source={item.imageSource} />
-            )}
-            horizontal 
-            showsHorizontalScrollIndicator={false} 
-            contentContainerStyle={{
-              gap: 4, 
-            }}
-          />
-        </View>
+        <BookCardContainer trendingBooks={trendingBooks} contains="Trending" />
+        <BookCardContainer trendingBooks={trendingBooks} contains="Latest" />
+        <BookCardContainer
+          trendingBooks={trendingBooks}
+          contains="Recommended"
+        />
       </ScrollView>
+      <StatusBar backgroundColor="#FF9100" style="auto" />
+
     </SafeAreaView>
   );
 };
