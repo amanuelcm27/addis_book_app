@@ -28,17 +28,17 @@ const Home = () => {
   };
 
   const trendingBooks = [
-    { id: "1", imageSource: images.animal, title: "Animal Farm" },
+    { id: "1", imageSource: images.animal, title: "Animal Farm" , type:'audio' },
     { id: "2", imageSource: images.atlas, title: "Atlas" },
-    { id: "3", imageSource: images.got, title: "Game of Thrones" },
+    { id: "3", imageSource: images.got, title: "Game of Thrones"  , type:'audio' },
     { id: "4", imageSource: images.htw, title: "How to Win Friends" },
-    { id: "5", imageSource: images.unscripted, title: "Unscripted" },
+    { id: "5", imageSource: images.unscripted, title: "Unscripted"  , type:'audio' },
   ];
 
   return (
     <SafeAreaView className="h-full">
       <View
-        className="bg-primary flex-row h-[100px] items-center p-4"
+        className="bg-primary flex-row h-[70px] items-center p-4"
         style={{
           shadowOffset: { width: 5, height: 5 },
           shadowColor: "black",
@@ -64,8 +64,8 @@ const Home = () => {
           <Image source={images.logo} className="w-24 h-24" />
         </View>
       </View>
-      <ScrollView>
-        <View className="flex-row w-full flex-wrap my-6 gap-2 justify-between  p-2">
+      <ScrollView className='w-full'>
+        <View className="flex-row flex-wrap justify-between my-6 mx-4">
           <SmallBookCard imageSource={images.animal} title="Animal Farm" />
           <SmallBookCard imageSource={images.atlas} title="Atlas" />
           <SmallBookCard imageSource={images.got} title="Game of Thrones" />

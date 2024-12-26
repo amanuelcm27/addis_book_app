@@ -20,6 +20,8 @@ const BookCardContainer = ({ trendingBooks , contains }) => {
           <LargeBookCard
             activeItem={activeItem}
             item={item}
+            styles={'w-[200px]'}
+            animate={true}
           />
         )}
         horizontal

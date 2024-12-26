@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
 
-const SmallBookCard = ({ imageSource, title, width = "0%" }) => {
+const SmallBookCard = ({ imageSource, title}) => {
   return (
     <View
-      className={`flex-row w-[190px] h-[100px] rounded-xl bg-white items-center`}
+      className={`flex-row w-[48%] mb-4  h-[80px] rounded-xl bg-white items-center`}
       style={{
         shadowOffset: { width: 5, height: 0 },
         shadowColor: "black",
@@ -15,7 +15,7 @@ const SmallBookCard = ({ imageSource, title, width = "0%" }) => {
       }}
     >
       <Image
-        className="w-1/2 h-full rounded-tl-xl rounded-bl-xl"
+        className="w-1/2 h-full rounded-tl-xl rounded-bl-xl "
         source={imageSource}
         resizeMode="cover"
       />

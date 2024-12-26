@@ -15,6 +15,7 @@ import {
   faBookOpen,
   faGear,
   faBars,
+  faPlayCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 export const setupIcons = () => {
@@ -33,6 +34,7 @@ export const setupIcons = () => {
     faHeadphones,
     faBookOpen,
     faGear,
-    faBars
+    faBars,
+    faPlayCircle
   );
 };
