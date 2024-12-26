@@ -28,11 +28,26 @@ const Home = () => {
   };
 
   const trendingBooks = [
-    { id: "1", imageSource: images.animal, title: "Animal Farm" , type:'audio' },
+    {
+      id: "1",
+      imageSource: images.animal,
+      title: "Animal Farm",
+      type: "audio",
+    },
     { id: "2", imageSource: images.atlas, title: "Atlas" },
-    { id: "3", imageSource: images.got, title: "Game of Thrones"  , type:'audio' },
+    {
+      id: "3",
+      imageSource: images.got,
+      title: "Game of Thrones",
+      type: "audio",
+    },
     { id: "4", imageSource: images.htw, title: "How to Win Friends" },
-    { id: "5", imageSource: images.unscripted, title: "Unscripted"  , type:'audio' },
+    {
+      id: "5",
+      imageSource: images.unscripted,
+      title: "Unscripted",
+      type: "audio",
+    },
   ];
 
   return (
@@ -64,7 +79,7 @@ const Home = () => {
           <Image source={images.logo} className="w-24 h-24" />
         </View>
       </View>
-      <ScrollView className='w-full'>
+      <ScrollView className="w-full">
         <View className="flex-row flex-wrap justify-between my-6 mx-4">
           <SmallBookCard imageSource={images.animal} title="Animal Farm" />
           <SmallBookCard imageSource={images.atlas} title="Atlas" />
@@ -85,7 +100,6 @@ const Home = () => {
         />
       </ScrollView>
       <StatusBar backgroundColor="#FF9100" style="auto" />
-
     </SafeAreaView>
   );
 };

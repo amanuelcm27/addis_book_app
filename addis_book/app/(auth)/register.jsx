@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   ScrollView,
-  Platform
+  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -23,7 +23,13 @@ const register = () => {
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <View className="flex- justify-center items-center ">
             <Text className="font-primarySemiBold text-xl py-4 text-center text-white">
               Sign up with
@@ -43,13 +49,28 @@ const register = () => {
               </TouchableOpacity>
             </View>
             <View className="w-full">
-              <FormField label={"Email"} placeholder={"enter your email"} />
               <FormField
+                containerStyle={"mx-6 my-2"}
+                labelStyle={"text-white"}
+                inputContainerStyle={"border-white"}
+                inputStyle={"text-white"}
+                label={"Email"}
+                placeholder={"enter your email"}
+              />
+              <FormField
+                containerStyle={"mx-6 my-2"}
+                labelStyle={"text-white"}
+                inputContainerStyle={"border-white"}
+                inputStyle={"text-white"}
                 label={"Password"}
                 type={"password"}
                 placeholder={"enter your password"}
               />
               <FormField
+                containerStyle={"mx-6 my-2"}
+                labelStyle={"text-white"}
+                inputContainerStyle={"border-white"}
+                inputStyle={"text-white"}
                 label={"Confirm Password"}
                 type={"password"}
                 placeholder={"confirm your password"}

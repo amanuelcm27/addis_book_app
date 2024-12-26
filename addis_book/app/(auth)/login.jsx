@@ -1,6 +1,13 @@
-import { View, Text, Image, TouchableOpacity,   KeyboardAvoidingView,
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  KeyboardAvoidingView,
   ScrollView,
-  Platform,TextInput } from "react-native";
+  Platform,
+  TextInput,
+} from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
@@ -16,7 +23,13 @@ const login = () => {
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <View className="flex- justify-center items-center ">
             <Text className="font-primarySemiBold text-xl py-4 text-center text-white">
               Sign in with
@@ -36,13 +49,26 @@ const login = () => {
               </TouchableOpacity>
             </View>
             <View className="w-full">
-              <FormField label={"Email"} placeholder={"enter your email"} />
               <FormField
+                containerStyle={"mx-6 my-2"}
+                labelStyle={"text-white"}
+                inputContainerStyle={"border-white"}
+                inputStyle={"text-white"}
+                label={"Email"}
+                placeholder={"enter your email"}
+                placeholderColor="rgba(255, 255, 255, 0.7)"
+              />
+              <FormField
+                containerStyle={"mx-6 my-2"}
+                labelStyle={"text-white"}
+                inputContainerStyle={"border-white"}
+                inputStyle={"text-white"}
                 label={"Password"}
+              
                 type={"password"}
                 placeholder={"enter your password"}
+                placeholderColor="rgba(255, 255, 255, 0.7)"
               />
-          
             </View>
             <Button
               text={"Sign in"}
