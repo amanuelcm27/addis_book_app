@@ -1,18 +1,12 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
+import shadowStyles from "../utils/shadowStyles";
 
 const SmallBookCard = ({ imageSource, title}) => {
   return (
     <View
       className={`flex-row w-[48%] mb-4  h-[80px] rounded-xl bg-white items-center`}
-      style={{
-        shadowOffset: { width: 5, height: 0 },
-        shadowColor: "black",
-        shadowOpacity: 1,
-        shadowRadius: 5,
-        elevation: 3,
-        zIndex: 1,
-      }}
+      style={shadowStyles.shadow}
     >
       <Image
         className="w-1/2 h-full rounded-tl-xl rounded-bl-xl "

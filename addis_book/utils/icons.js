@@ -9,13 +9,15 @@ import {
   faClock,
   faAnglesRight,
   faCirclePlus,
+  faAngleLeft,
   faEye,
   faEyeSlash,
   faHeadphones,
   faBookOpen,
   faGear,
   faBars,
-  faPlayCircle
+  faPlayCircle,
+  faPen,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const setupIcons = () => {
@@ -28,6 +30,7 @@ export const setupIcons = () => {
     faMagnifyingGlass,
     faClock,
     faAnglesRight,
+    faAngleLeft,
     faCirclePlus,
     faEye,
     faEyeSlash,
@@ -35,6 +38,7 @@ export const setupIcons = () => {
     faBookOpen,
     faGear,
     faBars,
-    faPlayCircle
+    faPlayCircle,
+    faPen
   );
 };

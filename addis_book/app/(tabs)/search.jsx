@@ -67,7 +67,7 @@ const search = () => {
         <View className="">
           <FormField
             containerStyle={"mx-4"}
-            inputContainerStyle={"rounded-[50] "}
+            inputContainerStyle={"rounded-[50px]"}
             inputStyle={"text-black font-primaryRegular"}
             placeholder={"search by title"}
           />
