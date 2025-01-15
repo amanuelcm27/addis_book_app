@@ -8,7 +8,10 @@ import { StatusBar } from "expo-status-bar";
 const TabLayout = () => {
   return (
     <>
-      <Tabs tabBar={(props) => <TabBar {...props} />}>
+      <Tabs
+        tabBar={(props) => <TabBar {...props} />}
+        
+      >
         <Tabs.Screen
           name="home"
           options={{

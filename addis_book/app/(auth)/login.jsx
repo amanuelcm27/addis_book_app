@@ -27,10 +27,9 @@ const login = () => {
           contentContainerStyle={{
             flexGrow: 1,
             justifyContent: "center",
-            alignItems: "center",
           }}
         >
-          <View className="flex- justify-center items-center ">
+          <View className="flex-1 justify-center items-center ">
             <Text className="font-primarySemiBold text-xl py-4 text-center text-white">
               Sign in with
             </Text>
@@ -69,12 +68,13 @@ const login = () => {
                 placeholder={"enter your password"}
                 placeholderColor="rgba(255, 255, 255, 0.7)"
               />
-            </View>
-            <Button
+              <Button
               text={"Sign in"}
               isLoading={isLoading}
               onClick={() => router.push("/home")}
             />
+            </View>
+            
             <View>
               <Text className="text-white font-primaryLight">
                 Don't have an account?{" "}

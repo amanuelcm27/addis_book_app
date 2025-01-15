@@ -1,24 +1,19 @@
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-} from "react-native";
 import React, { useState } from "react";
+import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import images from "../../constants/images";
 import * as Animatable from "react-native-animatable";
 import SmallBookCard from "../../components/SmallBookCard";
-import LargeBookCard from "../../components/LargeBookCard";
 import BookCardContainer from "../../components/BookCardContainer";
+import images from "../../constants/images";
 import { StatusBar } from "expo-status-bar";
+import { useNavigation } from "expo-router";
 
-const Home = () => {
+const Drawer = createDrawerNavigator();
+
+const HomeScreen = ({ navigation }) => {
   const [isPressed, setIsPressed] = useState(false);
-
   const handlePressIn = () => {
     setIsPressed(true);
   };
@@ -60,16 +55,17 @@ const Home = () => {
           shadowOpacity: 1,
           shadowRadius: 5,
           elevation: 10,
-          zIndex: 1,
         }}
       >
         <Animatable.View
           animation={isPressed ? "rotate" : "swing"}
           duration={500}
+          delay={0}
         >
           <TouchableOpacity
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
+            onPress={() => navigation.toggleDrawer()}
             activeOpacity={0.6}
           >
             <FontAwesomeIcon icon="fa-bars" color="white" size={32} />
@@ -101,6 +97,75 @@ const Home = () => {
       </ScrollView>
       <StatusBar backgroundColor="#FF9100" style="auto" />
     </SafeAreaView>
+  );
+};
+const SidebarContent = ({ navigation }) => {
+  return (
+    <SafeAreaView
+      style={{
+        position: "absolute",  // Make sidebar overlay
+        top: 0,
+        left: 0,
+        width: "100%",  
+        height: "100%", 
+        padding: 10,
+        backgroundColor: "white",
+        borderTopRightRadius: 50,
+        borderBottomRightRadius: 25,
+        shadowColor: "orange",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+        elevation: 20,
+        zIndex: 999,
+      }}
+    >
+      <TouchableOpacity
+        onPress={() => navigation.toggleDrawer()}
+        activeOpacity={0.6}
+      >
+        <FontAwesomeIcon icon="fa-close" color="black" size={32} />
+      </TouchableOpacity>
+      <View style={{ marginTop: 20 }}>
+        {[
+          { label: "Account", icon: "fa-user" },
+          { label: "Genre", icon: "fa-meteor" },
+          { label: "Authors", icon: "fa-user-pen" },
+          { label: "Narrators", icon: "fa-wave-square" },
+          { label: "About us", icon: "fa-users" },
+          { label: "FAQ", icon: "fa-question" },
+        ].map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            className="flex-row items-center my-2 p-4 border-2 rounded-full"
+          >
+            <FontAwesomeIcon icon={item.icon} size={22} />
+            <Text className="px-4 font-primaryBlack">{item.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const Home = () => {
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        headerShown: false,
+
+        drawerStyle: {
+          width: 300,
+          backgroundColor: "c",
+        },
+        sceneContainerStyle: {
+          backgroundColor: "white",
+        },
+      }}
+      drawerContent={(props) => <SidebarContent {...props} />}
+    >
+      <Drawer.Screen name="HomeScreen" component={HomeScreen} />
+    </Drawer.Navigator>
   );
 };
 

@@ -5,7 +5,14 @@ export function TabBar({ state, descriptors, navigation }) {
     const { colors } = useTheme();
   
     return (
-      <View className="flex-row h-20 shadow-md p-4 shadow-black bg-white mx-2 my-4 rounded-full items-center">
+      <View className="flex-row h-20 shadow-md p-4 shadow-black bg-white mx-2 my-4 rounded-full items-center"
+      style={{
+        position: 'absolute',  // Fix the TabBar at the bottom
+        bottom: 0,             // Keep it at the bottom
+        left: 0,
+        right: 0,
+        zIndex: 1,            
+      }}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
           const label =

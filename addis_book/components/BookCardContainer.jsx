@@ -12,7 +12,7 @@ const BookCardContainer = ({ trendingBooks , contains }) => {
   };
   return (
     <View className="mx-2 my-4">
-      <Text className="font-primaryBlack text-4xl mb-4">{contains}</Text>
+      <Text className="font-primaryBlack text-2xl mb-4">{contains}</Text>
       <FlatList
         data={trendingBooks}
         keyExtractor={(item) => item.id}
@@ -20,7 +20,7 @@ const BookCardContainer = ({ trendingBooks , contains }) => {
           <LargeBookCard
             activeItem={activeItem}
             item={item}
-            styles={'w-[200px]'}
+            styles={'w-[170px]'}
             animate={true}
           />
         )}

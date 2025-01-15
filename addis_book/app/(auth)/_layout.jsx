@@ -10,7 +10,7 @@ const AuthLayout = () => {
         <Stack.Screen name="login" options={{ headerShown: false }} />
         <Stack.Screen name="register" options={{ headerShown: false }} />
       </Stack>
-      <StatusBar backgroundColor="#FF9100" style="auto" />
+      <StatusBar backgroundColor="#FF9100" style="light" />
     </>
     
   );

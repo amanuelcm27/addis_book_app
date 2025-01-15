@@ -29,7 +29,7 @@ const index = () => {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-      <StatusBar  style="auto" />
+      <StatusBar  style="light" />
     </>
   );
 };

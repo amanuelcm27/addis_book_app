@@ -18,6 +18,12 @@ import {
   faBars,
   faPlayCircle,
   faPen,
+  faClose,
+  faMeteor,
+  faUsers,
+  faUserPen,
+  faQuestion,
+  faWaveSquare,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const setupIcons = () => {
@@ -26,6 +32,7 @@ export const setupIcons = () => {
     faHouse,
     faBell,
     faUser,
+    faUsers,
     faUtensils,
     faMagnifyingGlass,
     faClock,
@@ -39,6 +46,11 @@ export const setupIcons = () => {
     faGear,
     faBars,
     faPlayCircle,
-    faPen
+    faPen,
+    faClose,
+    faMeteor,
+    faUserPen,
+    faQuestion,
+    faWaveSquare
   );
 };

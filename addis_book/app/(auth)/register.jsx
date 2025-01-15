@@ -18,7 +18,7 @@ import Button from "../../components/Button";
 const register = () => {
   const [isLoading, setIsLoading] = useState(false);
   return (
-    <SafeAreaView className="flex-1 bg-primary">
+    <SafeAreaView className="flex-1 bg-primary w-full">
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -27,10 +27,9 @@ const register = () => {
           contentContainerStyle={{
             flexGrow: 1,
             justifyContent: "center",
-            alignItems: "center",
           }}
         >
-          <View className="flex- justify-center items-center ">
+          <View className="justify-center items-center ">
             <Text className="font-primarySemiBold text-xl py-4 text-center text-white">
               Sign up with
             </Text>
@@ -48,7 +47,7 @@ const register = () => {
                 <Image source={images.whatsapp} className="w-12 h-12 px-4" />
               </TouchableOpacity>
             </View>
-            <View className="w-full">
+            <View className="w-full ">
               <FormField
                 containerStyle={"mx-6 my-2"}
                 labelStyle={"text-white"}
@@ -56,15 +55,20 @@ const register = () => {
                 inputStyle={"text-white"}
                 label={"Email"}
                 placeholder={"enter your email"}
+                placeholderColor="rgba(255, 255, 255, 0.7)"
+
               />
               <FormField
                 containerStyle={"mx-6 my-2"}
                 labelStyle={"text-white"}
+                
                 inputContainerStyle={"border-white"}
                 inputStyle={"text-white"}
                 label={"Password"}
                 type={"password"}
                 placeholder={"enter your password"}
+                placeholderColor="rgba(255, 255, 255, 0.7)"
+
               />
               <FormField
                 containerStyle={"mx-6 my-2"}
@@ -73,14 +77,17 @@ const register = () => {
                 inputStyle={"text-white"}
                 label={"Confirm Password"}
                 type={"password"}
+                placeholderColor="rgba(255, 255, 255, 0.7)"
+
                 placeholder={"confirm your password"}
               />
-            </View>
-            <Button
+                 <Button
               text={"Sign up"}
               isLoading={isLoading}
               onClick={() => setIsLoading(!isLoading)}
             />
+            </View>
+         
             <View>
               <Text className="text-white font-primaryLight">
                 Already have an account?{" "}
