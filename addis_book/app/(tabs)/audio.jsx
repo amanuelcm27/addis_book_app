@@ -1,8 +1,6 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { StatusBar } from "expo-status-bar";
 import LargeBookCard from "../../components/LargeBookCard";
 import images from "../../constants/images";
 import ContentHeader from "../../components/ContentHeader"
@@ -14,10 +12,14 @@ const audiobook = () => {
     { id: "4", imageSource: images.htw, title: "How to Win Friends" },
     { id: "5", imageSource: images.unscripted, title: "Unscripted"  , type:'audio' },
   ];
+    const [counter, setCounter] = useState(0);
+  
   return (
     <SafeAreaView className="h-full">
       <ScrollView >
         <ContentHeader text={'Browse Audio Books'} icon={'fa-headphones'} />
+                  <TouchableOpacity onPress={()=>setCounter(counter+1)}><Text>+</Text></TouchableOpacity>
+                  <Text>counter:{counter}</Text>
         <View className="flex-row items-center justify-center mx-4  p-2">
           <TouchableOpacity activeOpacity={0.35}>
             <View className="  items-center mx-6 p-4">

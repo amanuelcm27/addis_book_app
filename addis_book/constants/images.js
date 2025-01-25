@@ -12,7 +12,8 @@ import mjd from "../assets/images/mock/mjd.jpg"
 import orwel from "../assets/images/mock/orwel.jpg"
 import unscripted from "../assets/images/mock/uncripted.jpg"
 import bookcol from "../assets/images/mock/bookcol.jpg"
-
+import stripe from "../assets/images/stripe.png"
+import chapa from "../assets/images/chapa.png"
 
 export default {
     logo,
@@ -28,6 +29,8 @@ export default {
     atlas,
     htw,
     mjd,
-    bookcol
+    bookcol,
+    stripe,
+    chapa
 }
 

@@ -22,7 +22,7 @@ const index = () => {
           </View>
         </View>
         <View className="my-8 mx-4">
-          <TouchableOpacity onPress={()=>router.push('/book')} className=" bg-white p-6 rounded-full mt-4 w-full shadow-lg shadow-black ">
+          <TouchableOpacity onPress={()=>router.push('/login')} className=" bg-white p-6 rounded-full mt-4 w-full shadow-lg shadow-black ">
             <Text  className="text-black text-4xl  text-center font-primaryBlackItalic">
               Get Started
             </Text>

@@ -1,10 +1,13 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Touchable, TouchableOpacity } from "react-native";
 import shadowStyles from "../utils/shadowStyles";
+import { router } from "expo-router";
 
-const SmallBookCard = ({ imageSource, title}) => {
+const SmallBookCard = ({ imageSource, title }) => {
   return (
-    <View
+    <TouchableOpacity
+      activeOpacity={0.85}
+      onPress={() => router.push("/book")}
       className={`flex-row w-[48%] mb-4  h-[80px] rounded-xl bg-white items-center`}
       style={shadowStyles.shadow}
     >
@@ -16,14 +19,13 @@ const SmallBookCard = ({ imageSource, title}) => {
       <View className="pr-2 flex-1">
         <Text
           className="font-primarySemiBold mx-2"
-          numberOfLines={1} 
+          numberOfLines={1}
           ellipsizeMode="tail"
         >
           {title}
         </Text>
       </View>
-    
-    </View>
+    </TouchableOpacity>
   );
 };
 

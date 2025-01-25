@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import * as Animatable from "react-native-animatable";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { router } from "expo-router";
 
 const zoomIn = {
   0: {
@@ -23,7 +24,9 @@ const zoomOut = {
 
 const LargeBookCard = ({ activeItem, item, styles, animate = false }) => {
   const CardContent = (
-    <View
+    <TouchableOpacity
+      onPress={() => router.push("/book")}
+      activeOpacity={0.85}
       className={`h-[300px] relative rounded-xl bg-white overflow-hidden ${styles}`}
       style={{
         shadowOffset: { width: 5, height: 0 },
@@ -43,13 +46,10 @@ const LargeBookCard = ({ activeItem, item, styles, animate = false }) => {
           <FontAwesomeIcon icon={"fa-play-circle"} size={50} color="#FF9100" />
         </TouchableOpacity>
       )}
-      <View
-        className="absolute right-0 top-0 bg-orange-500 w-20 rounded-bl-full h-12 items-center justify-center translate-x-[10px]"
-
-      >
+      <View className="absolute right-0 top-0 bg-orange-500 w-20 rounded-bl-full h-12 items-center justify-center translate-x-[10px]">
         <Text className="text-white font-primaryBlack text-lg ">Pro</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   if (animate) {
