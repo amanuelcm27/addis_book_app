@@ -13,7 +13,7 @@ import images from "../../constants/images";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import FormField from "../../components/FormField";
 import { router } from "expo-router";
-import Button from "../../components/Button";
+import CustomButton from "../../components/CustomButton";
 
 const register = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -81,7 +81,7 @@ const register = () => {
 
                 placeholder={"confirm your password"}
               />
-                 <Button
+                 <CustomButton
               text={"Sign up"}
               isLoading={isLoading}
               onClick={() => setIsLoading(!isLoading)}

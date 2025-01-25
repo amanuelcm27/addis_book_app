@@ -28,6 +28,10 @@ export default function App() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(sidebar)" options={{ headerShown: false }} />
+        <Stack.Screen name="(details)" options={{ headerShown: false }} />
+        <Stack.Screen name="(checkout)" options={{headerShown:false}}/>
+        
       </Stack>
     </>
   );

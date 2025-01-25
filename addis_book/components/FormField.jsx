@@ -9,8 +9,9 @@ const FormField = ({ type, label, placeholder, placeholderColor='black' , value,
   return (
     <View className={`${containerStyle}`}>
       {label && <Text className={` font-primarySemiBold text-xl ${labelStyle} py-2 `}>{label}</Text>}
-      <View className={`border-2 flex-row items-center ${inputContainerStyle} rounded-sm p-2`}>
+      <View className={`border-2 flex-row items-center ${inputContainerStyle} justify-center p-2`}>
         <TextInput
+
           className={`${inputStyle} flex-1 `}
           placeholder={placeholder}
           placeholderTextColor={placeholderColor}

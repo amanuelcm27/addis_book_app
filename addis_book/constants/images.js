@@ -11,7 +11,7 @@ import jk from "../assets/images/mock/jk.jpg"
 import mjd from "../assets/images/mock/mjd.jpg"
 import orwel from "../assets/images/mock/orwel.jpg"
 import unscripted from "../assets/images/mock/uncripted.jpg"
-
+import bookcol from "../assets/images/mock/bookcol.jpg"
 
 
 export default {
@@ -27,6 +27,7 @@ export default {
     got,
     atlas,
     htw,
-    mjd
+    mjd,
+    bookcol
 }
 

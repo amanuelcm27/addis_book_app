@@ -24,6 +24,10 @@ import {
   faUserPen,
   faQuestion,
   faWaveSquare,
+  faCircleExclamation,
+  faSortDown,
+  faSortUp,
+  faComment,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const setupIcons = () => {
@@ -51,6 +55,10 @@ export const setupIcons = () => {
     faMeteor,
     faUserPen,
     faQuestion,
-    faWaveSquare
+    faWaveSquare,
+    faCircleExclamation,
+    faSortDown,
+    faSortUp,
+    faComment,
   );
 };

@@ -13,7 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
 import FormField from "../../components/FormField";
 import { router } from "expo-router";
-import Button from "../../components/Button";
+import CustomButton from "../../components/CustomButton";
 
 const login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -68,7 +68,7 @@ const login = () => {
                 placeholder={"enter your password"}
                 placeholderColor="rgba(255, 255, 255, 0.7)"
               />
-              <Button
+              <CustomButton
               text={"Sign in"}
               isLoading={isLoading}
               onClick={() => router.push("/home")}

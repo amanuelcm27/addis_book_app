@@ -6,8 +6,8 @@ import * as Animatable from 'react-native-animatable';
 const TabIcon = ({ icon, name, focused }) => {
   return (
     <Animatable.View
-      animation={focused ? "jello" : "swing"}  
-      duration={1000}
+      animation={focused ? "jello" : ""}  
+      duration={500}
       className="flex-row items-center px-2 py-2"
       style={{
         backgroundColor: focused ? 'white' : 'transparent', 
@@ -22,9 +22,9 @@ const TabIcon = ({ icon, name, focused }) => {
       }}
     >
       <View className="m-2">
-        <FontAwesomeIcon icon={icon} size={22} />
+        <FontAwesomeIcon icon={icon} size={16} />
       </View>
-      {focused && <Text className="font-black">{name}</Text>}
+      {focused && <Text className="font-primaryBlack text-sm">{name}</Text>}
     </Animatable.View>
   );
 };

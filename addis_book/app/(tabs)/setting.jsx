@@ -9,6 +9,7 @@ import profile from "../settingTabs/profile";
 import plan from "../settingTabs/plan";
 import downloads from "../settingTabs/downloads";
 import notifications from "../settingTabs/notifications";
+import { router } from "expo-router";
 
 const Setting = () => {
   const [index, setIndex] = useState(0); // State to control the active tab
@@ -44,7 +45,7 @@ const Setting = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <View style={{ margin: 20, marginBottom: 40 }}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=> router.back()}>
           <FontAwesomeIcon icon="fa-angle-left" size={30} />
         </TouchableOpacity>
       </View>
