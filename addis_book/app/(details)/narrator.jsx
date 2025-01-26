@@ -47,7 +47,7 @@ const NarratorDetail = () => {
             </View>
           </View>
           <View className="my-4 mx-4">
-            <Text className="text-xl font-primaryItalic">About Author</Text>
+            <Text className="text-xl font-primaryItalic">About Narrator</Text>
             <View className="border-l-2 border-gray-300 my-2 p-4">
               <Text className="text-base font-primaryRegular">
                 MJ DeMarco is a Narrator

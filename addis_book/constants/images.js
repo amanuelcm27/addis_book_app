@@ -14,7 +14,7 @@ import unscripted from "../assets/images/mock/uncripted.jpg"
 import bookcol from "../assets/images/mock/bookcol.jpg"
 import stripe from "../assets/images/stripe.png"
 import chapa from "../assets/images/chapa.png"
-
+import ad from "../assets/images/mock/ad.png"
 export default {
     logo,
     google,
@@ -31,6 +31,7 @@ export default {
     mjd,
     bookcol,
     stripe,
-    chapa
+    chapa,
+    ad
 }
 

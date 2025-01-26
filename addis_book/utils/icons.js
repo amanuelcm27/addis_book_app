@@ -28,6 +28,13 @@ import {
   faSortDown,
   faSortUp,
   faComment,
+  faAngleDown,
+  faVolumeUp,
+  faForward,
+  faBackward,
+  faVolumeXmark,
+  faCirclePause,
+  faCirclePlay,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const setupIcons = () => {
@@ -42,6 +49,7 @@ export const setupIcons = () => {
     faClock,
     faAnglesRight,
     faAngleLeft,
+    faAngleDown,
     faCirclePlus,
     faEye,
     faEyeSlash,
@@ -50,6 +58,8 @@ export const setupIcons = () => {
     faGear,
     faBars,
     faPlayCircle,
+    faCirclePause,
+    faCirclePlay,
     faPen,
     faClose,
     faMeteor,
@@ -60,5 +70,9 @@ export const setupIcons = () => {
     faSortDown,
     faSortUp,
     faComment,
+    faVolumeUp,
+    faForward,
+    faBackward,
+    faVolumeXmark,
   );
 };
