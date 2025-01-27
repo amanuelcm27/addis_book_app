@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,18 +7,57 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import Slider from "@react-native-community/slider";
-import images from "../../constants/images";
 import { router } from "expo-router";
+// import TrackPlayer, { State } from "react-native-track-player";
+import images from "../../constants/images"; // assuming images are in this folder
 
 const Playback = () => {
-  const [currentTime, setCurrentTime] = useState(0); 
-  const totalDuration = 10 * 60 * 60 + 33 * 60; // Total duration in seconds (10:33:00)
-  const [draggedValue , setDraggedValue] = useState(0);
-  const [isSliding, setIsSliding] = useState(false); 
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isSliding, setIsSliding] = useState(false);
+  const [dragState, setDragState] = useState(undefined);
+  const [isMuted, setIsMuted] = useState(false);
+  const totalDuration = 10 * 60 * 60 + 33 * 60;
+
+  // useEffect(() => {
+  //   // Initialize Track Player when the component mounts
+  //   async function setupPlayer() {
+  //     await TrackPlayer.setupPlayer();
+  //     await TrackPlayer.updateOptions({
+  //       capabilities: [
+  //         Capability.Play,
+  //         Capability.Pause,
+  //         Capability.SkipToNext,
+  //         Capability.SkipToPrevious
+  //       ],
+  //     });
+  //     await TrackPlayer.add({
+  //       id: "trackId",
+  //       url: require("../../assets/audio/ghost.mp3"), // Local audio file
+  //       title: "Atlas Shrugged",
+  //       artist: "Ayn Rand",
+  //       artwork: images.atlas,
+  //     });
+  //   }
+  //   setupPlayer();
+  // }, []);
+
+  // useEffect(() => {
+  //   // Update the playback position during slider changes
+  //   if (isSliding) {
+  //     if (TrackPlayer != null) {
+  //       // Check if TrackPlayer is initialized before calling methods
+  //       TrackPlayer.seekTo(dragState);
+  //     }
+  //   } else {
+  //     if (TrackPlayer != null) {
+  //       TrackPlayer.seekTo(currentTime);
+  //     }
+  //   }
+  // }, [currentTime, dragState, isSliding]);
+
   const formatTime = (seconds) => {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
@@ -27,7 +67,31 @@ const Playback = () => {
       .padStart(2, "0")}`;
   };
 
-  console.log("currentTime", currentTime);
+  // const togglePlayback = async () => {
+  //   const currentState = await TrackPlayer.getState();
+  //   if (currentState === State.Playing) {
+  //     await TrackPlayer.pause();
+  //   } else {
+  //     await TrackPlayer.play();
+  //   }
+  // };
+
+  // const skipBackward = async () => {
+  //   const position = await TrackPlayer.getPosition();
+  //   TrackPlayer.seekTo(position - 10); // Go back 10 seconds
+  // };
+
+  // const skipForward = async () => {
+  //   const position = await TrackPlayer.getPosition();
+  //   TrackPlayer.seekTo(position + 10); // Skip forward 10 seconds
+  // };
+
+  // const toggleMute = async () => {
+  //   const currentVolume = await TrackPlayer.getVolume();
+  //   await TrackPlayer.setVolume(currentVolume === 0 ? 1 : 0); // Toggle between mute and unmute
+  //   setIsMuted(currentVolume === 0);
+  // };
+
   return (
     <View className="h-full">
       <ImageBackground
@@ -54,24 +118,29 @@ const Playback = () => {
             <Image className="w-full h-full rounded-xl" source={images.atlas} />
           </View>
           <View className="h-[150px] p-2">
-            <View>
-              <Slider
-                style={{ width: "100%", height: 20 }}
-                minimumValue={0}
-                maximumValue={totalDuration}
-                value={isSliding ? draggedValue : currentTime}
-                onValueChange={(value) => setDraggedValue(value) }
-                onSlidingStart={() => setIsSliding(true)}
-                onSlidingComplete={(value) => {
-                  setIsSliding(false);
+            <Slider
+              style={{ width: "100%", height: 20 }}
+              minimumValue={0}
+              maximumValue={totalDuration}
+              value={isSliding ? dragState : currentTime}
+              onValueChange={(value) => {
+                if (isSliding) {
                   setCurrentTime(value);
-                }}
-                step={1}
-                minimumTrackTintColor="#FF9100"
-                maximumTrackTintColor="#FFFFFF"
-                thumbTintColor="white"
-              />
-            </View>
+                }
+              }}
+              onSlidingStart={(value) => {
+                setDragState(value);
+                setIsSliding(true);
+              }}
+              onSlidingComplete={(value) => {
+                setIsSliding(false);
+                setCurrentTime(value);
+              }}
+              step={1}
+              minimumTrackTintColor="#FF9100"
+              maximumTrackTintColor="#FFFFFF"
+              thumbTintColor="white"
+            />
             <View className="flex-row justify-between items-center mx-4">
               <Text className="font-primaryRegular text-white">
                 {formatTime(currentTime)}
@@ -81,14 +150,19 @@ const Playback = () => {
               </Text>
             </View>
             <View className="flex-row items-center mx-4 justify-between">
-              <TouchableOpacity activeOpacity={0.5}>
-                <FontAwesomeIcon icon="fa-volume-up" color="white" size={30} />
+              <TouchableOpacity onPress={toggleMute} activeOpacity={0.5}>
+                <FontAwesomeIcon
+                  icon={isMuted ? "fa-volume-off" : "fa-volume-up"}
+                  color="white"
+                  size={30}
+                />
               </TouchableOpacity>
               <View className="flex-row gap-4 items-center">
-                <TouchableOpacity activeOpacity={0.5}>
+                <TouchableOpacity onPress={skipBackward} activeOpacity={0.5}>
                   <FontAwesomeIcon icon="fa-backward" color="white" size={30} />
                 </TouchableOpacity>
                 <TouchableOpacity
+                  onPress={togglePlayback}
                   activeOpacity={0.5}
                   className="bg-white rounded-full"
                 >
@@ -98,7 +172,7 @@ const Playback = () => {
                     size={48}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.5}>
+                <TouchableOpacity onPress={skipForward} activeOpacity={0.5}>
                   <FontAwesomeIcon icon="fa-forward" color="white" size={30} />
                 </TouchableOpacity>
               </View>

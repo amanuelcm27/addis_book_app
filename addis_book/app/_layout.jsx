@@ -4,8 +4,10 @@ import "../global.css";
 import { setupIcons } from "../utils/icons";
 import { SplashScreen, Stack } from "expo-router";
 import { useCustomFonts } from "../utils/fonts";
+// import TrackPlayer from 'react-native-track-player';
 
 setupIcons();
+// TrackPlayer.registerPlaybackService(() => require('../constants/service'));
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
@@ -23,7 +25,6 @@ export default function App() {
     return null;
   }
   return (
-    <>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -34,6 +35,5 @@ export default function App() {
         <Stack.Screen name="(checkout)" options={{headerShown:false}}/>
         
       </Stack>
-    </>
   );
 }
