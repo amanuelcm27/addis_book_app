@@ -93,7 +93,7 @@ const Playback = () => {
   // };
 
   return (
-    <View className="h-full">
+    <View className="h-full bg-black">
       <ImageBackground
         source={images.atlas}
         blurRadius={20}
@@ -150,7 +150,9 @@ const Playback = () => {
               </Text>
             </View>
             <View className="flex-row items-center mx-4 justify-between">
-              <TouchableOpacity onPress={toggleMute} activeOpacity={0.5}>
+              <TouchableOpacity 
+              // onPress={toggleMute}
+               activeOpacity={0.5}>
                 <FontAwesomeIcon
                   icon={isMuted ? "fa-volume-off" : "fa-volume-up"}
                   color="white"
@@ -158,11 +160,13 @@ const Playback = () => {
                 />
               </TouchableOpacity>
               <View className="flex-row gap-4 items-center">
-                <TouchableOpacity onPress={skipBackward} activeOpacity={0.5}>
+                <TouchableOpacity 
+                // onPress={skipBackward} 
+                activeOpacity={0.5}>
                   <FontAwesomeIcon icon="fa-backward" color="white" size={30} />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={togglePlayback}
+                  // onPress={togglePlayback}
                   activeOpacity={0.5}
                   className="bg-white rounded-full"
                 >
@@ -172,7 +176,9 @@ const Playback = () => {
                     size={48}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={skipForward} activeOpacity={0.5}>
+                <TouchableOpacity 
+                // onPress={skipForward} 
+                activeOpacity={0.5}>
                   <FontAwesomeIcon icon="fa-forward" color="white" size={30} />
                 </TouchableOpacity>
               </View>
