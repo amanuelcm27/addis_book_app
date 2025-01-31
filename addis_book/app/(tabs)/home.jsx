@@ -1,26 +1,16 @@
 import React, { useState } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import * as Animatable from "react-native-animatable";
 import SmallBookCard from "../../components/SmallBookCard";
 import BookCardContainer from "../../components/BookCardContainer";
 import images from "../../constants/images";
 import { StatusBar } from "expo-status-bar";
-import SideBar from "../(sidebar)/sidebar";
-const Drawer = createDrawerNavigator();
+import { useNavigation } from "@react-navigation/native";
 
-const HomeScreen = ({ navigation }) => {
-  const [isPressed, setIsPressed] = useState(false);
-  const handlePressIn = () => {
-    setIsPressed(true);
-  };
 
-  const handlePressOut = () => {
-    setIsPressed(false);
-  };
-
+const Home = () => {
+  const navigation = useNavigation();
   const trendingBooks = [
     {
       id: "1",
@@ -57,12 +47,10 @@ const HomeScreen = ({ navigation }) => {
         }}
       >
         <TouchableOpacity
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
           onPress={() => navigation.toggleDrawer()}
           activeOpacity={0.6}
         >
-          <FontAwesomeIcon icon="fa-bars" color="white" size={20} />
+          <FontAwesomeIcon icon="fa-bars" color="white" size={24} />
         </TouchableOpacity>
         <View className="ml-auto">
           <Image source={images.logo} className="w-16 h-16" />
@@ -90,26 +78,6 @@ const HomeScreen = ({ navigation }) => {
       </ScrollView>
       <StatusBar backgroundColor="#FF9100" style="auto" />
     </SafeAreaView>
-  );
-};
-
-const Home = () => {
-  return (
-    <Drawer.Navigator
-      screenOptions={{
-        headerShown: false,
-
-        drawerStyle: {
-          width: 300,
-        },
-        sceneContainerStyle: {
-          backgroundColor: "white",
-        },
-      }}
-      drawerContent={(props) => <SideBar {...props} />}
-    >
-      <Drawer.Screen name="HomeScreen" component={HomeScreen} />
-    </Drawer.Navigator>
   );
 };
 

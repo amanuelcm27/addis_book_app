@@ -48,7 +48,7 @@ const narrators = () => {
         <View className="w-full p-2 my-4">
           <View className="flex-row flex-wrap items-center justify-center gap-2">
             {filters.map((item, index) => (
-              <CreatorCard route={'narrator'} item={item} index={index} colors={colors} />
+              <CreatorCard route={'narrator'} key={index} item={item} index={index} colors={colors} />
             ))}
           </View>
         </View>

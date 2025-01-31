@@ -27,13 +27,12 @@ export default function App() {
   return (
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(sidebar)" options={{ headerShown: false }} />
         <Stack.Screen name="(details)" options={{ headerShown: false }} />
         <Stack.Screen name="(players)" options={{headerShown:false}}/>
         <Stack.Screen name="(checkout)" options={{headerShown:false}}/>
-        
       </Stack>
   );
 }
