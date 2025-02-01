@@ -8,8 +8,8 @@ const shadowStyles = StyleSheet.create({
       height: 5,
     },
     shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 8, // Android shadow
+    shadowRadius: 5,
+    elevation: 3, // Android shadow
     backgroundColor: "white",
   },
 });

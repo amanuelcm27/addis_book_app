@@ -28,14 +28,7 @@ const LargeBookCard = ({ activeItem, item, styles, animate = false }) => {
       onPress={() => router.push("/book")}
       activeOpacity={0.85}
       className={`h-[300px] relative rounded-xl bg-white overflow-hidden ${styles}`}
-      style={{
-        shadowOffset: { width: 5, height: 0 },
-        shadowColor: "black",
-        shadowOpacity: 1,
-        shadowRadius: 5,
-        elevation: 5,
-        zIndex: 1,
-      }}
+    
     >
       <Image className="w-full h-full rounded-xl" source={item.imageSource} />
       {item?.type === "audio" && (

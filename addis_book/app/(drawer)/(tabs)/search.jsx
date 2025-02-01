@@ -8,12 +8,10 @@ import {
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { StatusBar } from "expo-status-bar";
-import FormField from "../../components/FormField";
-import LargeBookCard from "../../components/LargeBookCard";
-import images from "../../constants/images";
-import ContentHeader from "../../components/ContentHeader";
+import FormField from "../../../components/FormField";
+import LargeBookCard from "../../../components/LargeBookCard";
+import images from "../../../constants/images";
+import ContentHeader from "../../../components/ContentHeader";
 const search = () => {
   const filters = [
     {

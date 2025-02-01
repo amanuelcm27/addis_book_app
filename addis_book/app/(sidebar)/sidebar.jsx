@@ -1,35 +1,34 @@
-import React, { memo, useState } from "react";
+import React, { memo, useCallback, useMemo, useState } from "react";
 import {
   View,
   Text,
-  Image,
-  ScrollView,
   TouchableOpacity,
-  Touchable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { router } from "expo-router";
-
+import { useDrawerStatus } from "@react-navigation/drawer";
 const SideBar = ({ navigation }) => {
+  const navigateTo = useCallback((route) => {
+    router.push(route);
+  }, []);
+  const menuItems = useMemo(() => [
+    { label: "Account", icon: "fa-user", route: "/setting" },
+    { label: "Genre", icon: "fa-meteor", route: "/search" },
+    { label: "Authors", icon: "fa-user-pen", route: "/authors" },
+    { label: "Narrators", icon: "fa-wave-square", route: "/narrators" },
+    { label: "About us", icon: "fa-users", route: "/aboutus" },
+    { label: "FAQ", icon: "fa-question", route: "/faq" },
+    { label: "Support", icon: "fa-comment", route: "/support" },
+  ], []);
   return (
     <SafeAreaView
       style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        padding: 10,
+        flex: 1,
         backgroundColor: "white",
+        padding: 10,
         borderTopRightRadius: 50,
-        borderBottomRightRadius: 25,
-        shadowColor: "black",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 5,
-        elevation: 20,
-        zIndex: 999,
+        borderBottomRightRadius: 30,
       }}
     >
       <TouchableOpacity
@@ -39,30 +38,19 @@ const SideBar = ({ navigation }) => {
         <FontAwesomeIcon icon="fa-close" color="black" size={24} />
       </TouchableOpacity>
       <View style={{ marginTop: 20, flex: 1 }}>
-        {[
-          { label: "Account", icon: "fa-user", route: "/setting" },
-          { label: "Genre", icon: "fa-meteor", route: "/search" },
-          { label: "Authors", icon: "fa-user-pen", route: "/authors" },
-          { label: "Narrators", icon: "fa-wave-square", route: "/narrators" },
-          { label: "About us", icon: "fa-users", route: "/aboutus" },
-          { label: "FAQ", icon: "fa-question", route: "/faq" },
-          { label: "Support", icon: "fa-comment", route: "/support" },
-        ].map((item, index) => (
+        {menuItems.map((item, index) => (
           <TouchableOpacity
             key={index}
             activeOpacity={0.4}
             className="flex-row items-center my-2 p-4  rounded-full"
             style={{
               borderRadius: 50,
-              shadowColor: "black",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.3,
-              shadowRadius: 10,
-              elevation: 2,
+              borderColor: "black",
+              borderWidth: 2,
               backgroundColor: "white",
             }}
             onPress={() => {
-              router.push(item.route);
+             navigateTo(item.route)
             }}
           >
             <FontAwesomeIcon icon={item.icon} size={22} />
@@ -80,7 +68,9 @@ const SideBar = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <TouchableOpacity
-        onPress={() => router.push("/terms")}
+        onPress={() => {
+          navigateTo(item.route)
+         }}
         className="flex-row"
       >
         <Text className=" text-gray-500 font-primaryRegular flex-1">

@@ -1,12 +1,13 @@
 import { View, Text } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
-import { TabBar } from "../../components/TabBar";
-import TabIcon from "../../components/TabIcon";
+import { TabBar } from "../../../components/TabBar";
+import TabIcon from "../../../components/TabIcon";
 
 const TabLayout = () => {
   return (
-    <Tabs tabBar={(props) => <TabBar {...props} />}>
+    <Tabs tabBar={(props) => <TabBar {...props} />}
+    >
       <Tabs.Screen
         name="home"
         options={{

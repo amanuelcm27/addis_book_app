@@ -8,11 +8,11 @@ const SmallBookCard = ({ imageSource, title }) => {
     <TouchableOpacity
       activeOpacity={0.85}
       onPress={() => router.push("/book")}
-      className={`flex-row w-[48%] mb-4  h-[80px] rounded-xl bg-white items-center`}
+      className={`flex-row w-[48%] mb-4  h-[70px] rounded-md bg-white items-center`}
       style={shadowStyles.shadow}
     >
       <Image
-        className="w-1/2 h-full rounded-tl-xl rounded-bl-xl "
+        className="w-[40%] h-full rounded-tl-md rounded-bl-md "
         source={imageSource}
         resizeMode="cover"
       />

@@ -7,7 +7,7 @@ export function TabBar({ state, descriptors, navigation }) {
     const { colors } = useTheme();
   
     return (
-      <View className="flex-row h-20 shadow-md p-4 shadow-black bg-white mx-2 my-4 rounded-full items-center"
+      <View className="flex-row h-20  p-4 bg-white mx-2 my-4 rounded-full items-center"
    >
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
@@ -50,6 +50,7 @@ export function TabBar({ state, descriptors, navigation }) {
               onPress={onPress}
               onLongPress={onLongPress}
               style={{ flex: 1, alignItems: "center" }}
+              activeOpacity={0.7}
             >
               {options.tabBarIcon &&
                 options.tabBarIcon({ color, focused: isFocused })}

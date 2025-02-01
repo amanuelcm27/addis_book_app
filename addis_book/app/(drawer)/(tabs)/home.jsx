@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import SmallBookCard from "../../components/SmallBookCard";
-import BookCardContainer from "../../components/BookCardContainer";
-import images from "../../constants/images";
+import SmallBookCard from "../../../components/SmallBookCard";
+import BookCardContainer from "../../../components/BookCardContainer";
+import images from "../../../constants/images";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 

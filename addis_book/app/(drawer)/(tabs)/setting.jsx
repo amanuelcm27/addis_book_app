@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { SafeAreaView } from "react-native-safe-area-context";
-import images from "../../constants/images";
-import shadowStyles from "../../utils/shadowStyles";
+import images from "../../../constants/images";
+import shadowStyles from "../../../utils/shadowStyles";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view"; // Import TabBar for TabView
-import profile from "../settingTabs/profile";
-import plan from "../settingTabs/plan";
-import downloads from "../settingTabs/downloads";
-import notifications from "../settingTabs/notifications";
+import profile from "../../settingTabs/profile";
+import plan from "../../settingTabs/plan";
+import downloads from "../../settingTabs/downloads";
+import notifications from "../../settingTabs/notifications";
 import { router } from "expo-router";
 
 const Setting = () => {
@@ -18,7 +18,6 @@ const Setting = () => {
     { key: "plan", title: "Plan" },
     { key: "downloads", title: "Downloads" },
     { key: "notifications", title: "Notifications" },
-    { key: "extra", title: "Extra" },
   ]);
 
   const renderScene = SceneMap({
@@ -26,7 +25,6 @@ const Setting = () => {
     plan: plan,
     downloads: downloads,
     notifications: notifications,
-    extra: () => <Text>Extra</Text>,
   });
 
   const renderTabBar = (props) => (
@@ -37,19 +35,20 @@ const Setting = () => {
       inactiveColor="#000"
       activeColor="#FF9100"
       indicatorStyle={{ backgroundColor: "#FF9100" }}
-      style={{ backgroundColor: "white", marginBottom: 20 }} // Apply custom font to tab bar
-
+      style={{ backgroundColor: "white", marginBottom: 20 }}
+      tabStyle={{ width: "auto", paddingHorizontal: 25 , marginHorizontal:20 }} // Adjust spacing
     />
   );
+  
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <View style={{ margin: 20, marginBottom: 40 }}>
+      <View style={{ margin: 20, marginBottom: 10 }}>
         <TouchableOpacity onPress={()=> router.back()}>
           <FontAwesomeIcon icon="fa-angle-left" size={30} />
         </TouchableOpacity>
       </View>
-      <View style={{ alignItems: "center", padding: 20 }}>
+      <View style={{ alignItems: "center", padding: 10 }}>
         <View
           style={shadowStyles.shadow}
           className="w-36 h-36 rounded-full bg-white relative"
