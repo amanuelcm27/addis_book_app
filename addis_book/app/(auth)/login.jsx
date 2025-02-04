@@ -12,11 +12,35 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
 import FormField from "../../components/FormField";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import CustomButton from "../../components/CustomButton";
+import { useAuth } from "../../context/AuthContext";
 
 const login = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const { redirect } = useLocalSearchParams();
+  const { login } = useAuth();
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+  const handleChange = (name, value) => {
+    setFormData({ ...formData, [name]: value });
+    console.log(formData);
+  };
+  const handleLogin = async () => {
+    console.log(formData);
+    if (!formData.username || !formData.password) {
+      alert("Please fill all fields");
+      return;
+    } else {
+      setIsLoading(true);
+      await login(formData);
+      setIsLoading(false);
+      router.replace(redirect ? decodeURIComponent(redirect) : "/home");
+    }
+  }; 
+
   return (
     <SafeAreaView className="flex-1 bg-primary">
       <KeyboardAvoidingView
@@ -49,32 +73,33 @@ const login = () => {
             </View>
             <View className="w-full">
               <FormField
+                onChangeText={(value) => handleChange("username", value)}
                 containerStyle={"mx-6 my-2"}
                 labelStyle={"text-white"}
                 inputContainerStyle={"border-white"}
                 inputStyle={"text-white"}
-                label={"Email"}
-                placeholder={"enter your email"}
+                label={"username"}
+                placeholder={"enter your username"}
                 placeholderColor="rgba(255, 255, 255, 0.7)"
               />
               <FormField
+                onChangeText={(value) => handleChange("password", value)}
                 containerStyle={"mx-6 my-2"}
                 labelStyle={"text-white"}
                 inputContainerStyle={"border-white"}
                 inputStyle={"text-white"}
                 label={"Password"}
-              
                 type={"password"}
                 placeholder={"enter your password"}
                 placeholderColor="rgba(255, 255, 255, 0.7)"
               />
               <CustomButton
-              text={"Sign in"}
-              isLoading={isLoading}
-              onClick={() => router.push("/home")}
-            />
+                text={"Sign in"}
+                isLoading={isLoading}
+                onClick={handleLogin}
+              />
             </View>
-            
+
             <View>
               <Text className="text-white font-primaryLight">
                 Don't have an account?{" "}

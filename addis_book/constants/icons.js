@@ -35,6 +35,7 @@ import {
   faVolumeXmark,
   faCirclePause,
   faCirclePlay,
+  faArrowRightFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const setupIcons = () => {
@@ -74,5 +75,6 @@ export const setupIcons = () => {
     faForward,
     faBackward,
     faVolumeXmark,
+    faArrowRightFromBracket,
   );
 };

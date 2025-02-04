@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
-import shadowStyles from "../../utils/shadowStyles";
+import shadowStyles from "../../constants/shadowStyles";
 
 const downloads = () => {
   return (

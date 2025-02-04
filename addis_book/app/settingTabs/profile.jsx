@@ -1,9 +1,6 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
-import shadowStyles from "../../utils/shadowStyles";
 
 
 const profile = () => {

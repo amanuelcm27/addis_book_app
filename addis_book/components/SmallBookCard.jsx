@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Image, Touchable, TouchableOpacity } from "react-native";
-import shadowStyles from "../utils/shadowStyles";
+import shadowStyles from "../constants/shadowStyles";
 import { router } from "expo-router";
 
 const SmallBookCard = ({ imageSource, title }) => {

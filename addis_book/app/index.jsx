@@ -4,7 +4,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import images from "../constants/images";
 import { router } from "expo-router";
+import { useAuth } from "../context/AuthContext";
 const index = () => {
+  const { user , loading } = useAuth();
+  console.log('log from index',user , loading)
   return (
     <>
       <SafeAreaView className='h-full bg-[#FF9100]'>
@@ -22,7 +25,7 @@ const index = () => {
           </View>
         </View>
         <View className="my-8 mx-4">
-          <TouchableOpacity onPress={()=>router.push('/login')} className=" bg-white p-6 rounded-full mt-4 w-full shadow-lg shadow-black ">
+          <TouchableOpacity onPress={()=>router.push('/home')} className=" bg-white p-6 rounded-full mt-4 w-full shadow-lg shadow-black ">
             <Text  className="text-black text-4xl  text-center font-primaryBlackItalic">
               Get Started
             </Text>

@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import images from "../../constants/images";
-import shadowStyles from "../../utils/shadowStyles";
+import shadowStyles from "../../constants/shadowStyles";
 
 const plan = () => {
   return (

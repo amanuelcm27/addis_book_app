@@ -6,7 +6,6 @@ import SideBar from "../(sidebar)/sidebar";
 const MemoizedSideBar = memo(SideBar);
 
 export default function DrawerLayout() {
-  console.log("Drawer Layout");
 
   return (
     <Drawer

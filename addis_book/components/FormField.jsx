@@ -18,6 +18,7 @@ const FormField = ({ type, label, placeholder, placeholderColor='black' , value,
           secureTextEntry={type === "password" && !isPasswordVisible}
           value={value}
           onChangeText={onChangeText}
+          
         />
         {type === "password" && (
           <TouchableOpacity

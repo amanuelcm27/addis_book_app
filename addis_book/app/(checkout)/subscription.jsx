@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
-import shadowStyles from "../../utils/shadowStyles";
+import shadowStyles from "../../constants/shadowStyles";
 import CustomButton from "../../components/CustomButton";
 import { router } from "expo-router";
 

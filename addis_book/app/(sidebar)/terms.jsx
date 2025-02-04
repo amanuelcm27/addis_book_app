@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import BackButton from "../../components/BackButton";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import shadowStyles from "../../utils/shadowStyles";
 
 const Terms = () => {
   const [expandedIndex, setExpandedIndex] = useState(null);
