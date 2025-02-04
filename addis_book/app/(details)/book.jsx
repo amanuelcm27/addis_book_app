@@ -1,4 +1,4 @@
-import React, { memo, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -11,14 +11,17 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import CustomButton from "../../components/CustomButton";
-import { router } from "expo-router";
+import { router, usePathname } from "expo-router";
 import images from "../../constants/images";
 import { StatusBar } from "expo-status-bar";
 import Checkout from "../(checkout)/checkout";
+import { useAuth } from "../../context/AuthContext";
 
 const BookDetail = memo(() => {
   const scrollY = useRef(new Animated.Value(0)).current;
   const [showCheckoutBox, setShowCheckoutBox] = useState(false);
+  const { user, loading } = useAuth();
+  const pathname = usePathname();
   const imageScale = scrollY.interpolate({
     inputRange: [0, 150], // Scale until 150px of scroll
     outputRange: [1, 0.2], // Shrink to 50% of original size
@@ -47,6 +50,13 @@ const BookDetail = memo(() => {
     outputRange: [150, 50],
     extrapolate: "clamp",
   });
+  const handleBuying = () => {
+    if (!loading && !user) {
+      router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
+    } else {
+      setShowCheckoutBox(true);
+    }
+  };
   return (
     <>
       <SafeAreaView className="bg-white h-full relative">
@@ -189,7 +199,7 @@ const BookDetail = memo(() => {
           text="Buy ($20)"
           background="bg-[#FF9100]"
           textColor="text-white"
-          onClick={() => setShowCheckoutBox(true)}
+          onClick={handleBuying}
         />
 
         <Checkout
