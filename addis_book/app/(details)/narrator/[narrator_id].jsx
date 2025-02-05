@@ -1,11 +1,13 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import images from "../../constants/images";
+import images from "../../../constants/images";
 import { StatusBar } from "expo-status-bar";
-import BookCardContainer from "../../components/BookCardContainer";
-import BackButton from "../../components/BackButton";
+import BookCardContainer from "../../../components/BookCardContainer";
+import BackButton from "../../../components/BackButton";
+import { useLocalSearchParams } from "expo-router";
+import { apiRequest } from "../../../utils/apiRequest";
 const NarratorDetail = () => {
   const trendingBooks = [
     {
@@ -27,6 +29,17 @@ const NarratorDetail = () => {
       type: "audio",
     },
   ];
+  const { narrator_id } = useLocalSearchParams();
+  const [narrator, setNarrator] = useState({});
+  const fetchNarrator = async () => { 
+    const response = await apiRequest("get", `/narrator/${narrator_id}`);
+    if (response.success) { 
+      
+    }
+  }
+  useEffect(() => {
+
+  } , [narrator_id])
   return (
     <>
       <SafeAreaView className="h-full">
@@ -61,7 +74,7 @@ const NarratorDetail = () => {
             <Text className="text-xl font-primaryItalic">
               Narrations by Mj Demarco
             </Text>
-            <BookCardContainer trendingBooks={trendingBooks} />
+            <BookCardContainer books={trendingBooks} />
           </View>
         </ScrollView>
         <BackButton />

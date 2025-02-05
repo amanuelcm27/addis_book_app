@@ -7,13 +7,12 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     const token = await SecureStore.getItemAsync("access_token");
-    console.log('interceptor output' , token)
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => { console.log('interceptor error ', error), Promise.reject(error)}
+  (error) => { Promise.reject(error)}
 );
 
 api.interceptors.response.use(
@@ -29,8 +28,6 @@ api.interceptors.response.use(
         const { data } = await axios.post(`${process.env.EXPO_PUBLIC_API_URL}token/refresh/`, {
           refresh: refreshToken,
         });
-        console.log('refresh interceptor function  ', data)
-
         await SecureStore.setItemAsync("access_token", data.access);
         await SecureStore.setItemAsync("refresh_token", data.refresh);
 

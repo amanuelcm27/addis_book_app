@@ -7,16 +7,13 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  console.log("log from AuthContext.jsx");
   const loadUser = async () => {
     try {
       const token = await SecureStore.getItemAsync("access_token");
-      console.log('token from loadUser function', token)
       if (token) {
         const { data } = await api.get("user/");
         setUser(data);
       }
-      console.log("User loaded:", token);
     } catch (error) {
       console.error("Error loading user:", error);
     } finally {
@@ -27,7 +24,6 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const { data } = await api.post("token/", credentials);
-      console.log("Login success:", data);
       await SecureStore.setItemAsync("access_token", data.access);
       await SecureStore.setItemAsync("refresh_token", data.refresh);
       await loadUser();

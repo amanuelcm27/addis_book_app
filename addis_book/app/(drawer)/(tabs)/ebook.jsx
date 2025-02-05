@@ -5,13 +5,15 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LargeBookCard from "../../../components/LargeBookCard";
 import images from "../../../constants/images";
 import ContentHeader from "../../../components/ContentHeader";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view"; // Keep TabView for transitions
-
+import api from "../../../utils/api";
+import { RefreshControl } from "react-native-gesture-handler";
+import { apiRequest } from "../../../utils/apiRequest";
 const trendingBooks = [
   { id: "3", imageSource: images.got, title: "Game of Thrones", type: "audio" },
 
@@ -24,7 +26,6 @@ const trendingBooks = [
     type: "audio",
   },
   { id: "4", imageSource: images.htw, title: "How to Win Friends" },
-
 ];
 
 const RecentPlayed = () => {
@@ -39,11 +40,32 @@ const RecentPlayed = () => {
   );
 };
 
-const AllAudio = () => {
+const AllEbook = () => {
+  const [books, setBooks] = useState([]);
+  const fetchBooks = async () => {
+    const response = await apiRequest('get', '/ebooks');
+    if (response.success) {
+      setBooks(response.data);
+      console.log(response.data);
+    }
+    else {
+      console.log(response.error);
+    }
+  };
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchBooks();
+    setRefreshing(false);
+  };
+  useEffect(() => {
+    fetchBooks();
+  }, []);
   return (
-    <ScrollView>
+    <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>
       <View className="flex-row flex-wrap justify-between mx-4 my-6">
-        {trendingBooks.map((book) => (
+        {books.map((book) => (
           <LargeBookCard key={book.id} styles={"w-[48%] mb-4"} item={book} />
         ))}
       </View>
@@ -59,7 +81,7 @@ const ebook = () => {
   ]);
 
   const renderScene = SceneMap({
-    all: AllAudio,
+    all: AllEbook,
     recent: RecentPlayed,
   });
   const renderTabBar = (props) => (

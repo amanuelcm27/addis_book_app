@@ -2,8 +2,8 @@ import { View, Text  , FlatList} from "react-native";
 import React, { useState } from "react";
 import LargeBookCard from "./LargeBookCard";
 
-const BookCardContainer = ({ trendingBooks , contains }) => {
-  const [activeItem, setActiveItem] = useState(trendingBooks[0]?.id);
+const BookCardContainer = ({ books , contains }) => {
+  const [activeItem, setActiveItem] = useState(books[0]?.id);
 
   const viewableItemsChanged = ({ viewableItems }) => {
     if (viewableItems.length > 0) {
@@ -14,7 +14,7 @@ const BookCardContainer = ({ trendingBooks , contains }) => {
     <View className="mx-2 my-4">
       <Text className="font-primaryBlack text-2xl mb-4">{contains}</Text>
       <FlatList
-        data={trendingBooks}
+        data={books}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <LargeBookCard

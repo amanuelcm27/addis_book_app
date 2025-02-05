@@ -7,9 +7,9 @@ const DetailLayout = () => {
   return (
     <>
       <Stack>
-        <Stack.Screen name="author" options={{ headerShown: false }} />
-        <Stack.Screen name="book" options={{ headerShown: false }} />
-        <Stack.Screen name="narrator" options={{ headerShown: false }} />
+        <Stack.Screen name="author/[author_id]" options={{ headerShown: false }} />
+        <Stack.Screen name="book/[book_id]" options={{ headerShown: false }} />
+        <Stack.Screen name="narrator/[narrator_id]" options={{ headerShown: false }} />
       </Stack>
     </>
   );

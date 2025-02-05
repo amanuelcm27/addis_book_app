@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -7,7 +7,9 @@ import BookCardContainer from "../../../components/BookCardContainer";
 import images from "../../../constants/images";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
-
+import api from "../../../utils/api";
+import { RefreshControl } from "react-native-gesture-handler";
+import { apiRequest } from "../../../utils/apiRequest";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -33,7 +35,26 @@ const Home = () => {
       type: "audio",
     },
   ];
+  const [books, setBooks] = useState([]);
+  const fetchBooks = async () => {
+    const response = await apiRequest("get", "/books");
+    if (response.success) {
+      setBooks(response.data);
+      console.log(response.data);
+    } else {
+      console.log(response.error);
+    }
+  };
+  const [refreshing, setRefreshing] = useState(false);
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchBooks();
+    setRefreshing(false);
+  };
+  useEffect(() => {
+    fetchBooks();
+  }, []);
   return (
     <SafeAreaView className="h-full">
       <View
@@ -56,23 +77,32 @@ const Home = () => {
           <Image source={images.logo} className="w-16 h-16" />
         </View>
       </View>
-      <ScrollView className="w-full">
-        <View className="flex-row flex-wrap justify-between my-6 mx-4">
-          <SmallBookCard imageSource={images.animal} title="Animal Farm" />
-          <SmallBookCard imageSource={images.atlas} title="Atlas" />
-          <SmallBookCard imageSource={images.got} title="Game of Thrones" />
-          <SmallBookCard
-            imageSource={images.htw}
-            title="How to Win Friends and Influence People"
+      <ScrollView
+        className="w-full"
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            colors={["#FF9100"]}
+            tintColor={"#FF9100"}
           />
-          <SmallBookCard imageSource={images.unscripted} title="Unscripted" />
-          <SmallBookCard imageSource={images.atlas} title="Atlas" />
+        }
+      >
+        <View className="flex-row flex-wrap justify-between my-6 mx-4">
+          {books.length > 0 &&
+            books.slice(0,6).map((book) => (
+              <SmallBookCard
+                key={book.id}
+                imageSource={book.cover}
+                title={book.title}
+                id={book.id}
+              />
+            ))}
         </View>
-
-        <BookCardContainer trendingBooks={trendingBooks} contains="Trending" />
-        <BookCardContainer trendingBooks={trendingBooks} contains="Latest" />
+        <BookCardContainer books={books} contains="Trending" />
+        <BookCardContainer books={books.slice().reverse()} contains="Latest" />
         <BookCardContainer
-          trendingBooks={trendingBooks}
+          books={[...books].sort(() => Math.random() - 0.5)}
           contains="Recommended"
         />
       </ScrollView>

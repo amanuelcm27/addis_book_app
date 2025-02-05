@@ -1,17 +1,32 @@
-import { View, Text, ScrollView, TouchableOpacity, Dimensions } from "react-native";
-import React, { useState, useCallback } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import React, { useState, useCallback, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LargeBookCard from "../../../components/LargeBookCard";
 import images from "../../../constants/images";
 import ContentHeader from "../../../components/ContentHeader";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view"; // Keep TabView for transitions
+import api from "../../../utils/api";
+import { RefreshControl } from "react-native-gesture-handler";
+import { apiRequest } from "../../../utils/apiRequest";
+
 
 const trendingBooks = [
   { id: "1", imageSource: images.animal, title: "Animal Farm", type: "audio" },
   { id: "2", imageSource: images.atlas, title: "Atlas" },
   { id: "3", imageSource: images.got, title: "Game of Thrones", type: "audio" },
   { id: "4", imageSource: images.htw, title: "How to Win Friends" },
-  { id: "5", imageSource: images.unscripted, title: "Unscripted", type: "audio" },
+  {
+    id: "5",
+    imageSource: images.unscripted,
+    title: "Unscripted",
+    type: "audio",
+  },
 ];
 
 const RecentPlayed = () => {
@@ -27,11 +42,40 @@ const RecentPlayed = () => {
 };
 
 const AllAudio = () => {
+  const [books, setBooks] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchBooks();
+    setRefreshing(false);
+  };
+  const fetchBooks = async () => {
+    const response = await apiRequest("get", "/audiobooks");
+    if (response.success) {
+      setBooks(response.data);
+      console.log(response.data);
+    } else {
+      console.log(response.error);
+    }
+  };
+  useEffect(() => {
+    fetchBooks();
+  }, []);
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }
+    >
       <View className="flex-row flex-wrap justify-between mx-4 my-6">
-        {trendingBooks.map((book) => (
-          <LargeBookCard key={book.id} styles={"w-[48%] mb-4"} item={book} />
+        {books.map((book) => (
+          <LargeBookCard
+            key={book.id}
+            styles={"w-[48%] mb-4"}
+            hasAudio={true}
+            item={book}
+          />
         ))}
       </View>
     </ScrollView>
@@ -49,13 +93,13 @@ const audiobook = () => {
     all: AllAudio,
     recent: RecentPlayed,
   });
-  const renderTabBar = props => (
+  const renderTabBar = (props) => (
     <TabBar
       {...props}
       activeColor="#FF9100"
       inactiveColor="black"
-      indicatorStyle={{ backgroundColor: '#FF9100' }}
-      style={{ backgroundColor: 'white' , elevation:0  , marginHorizontal:10 }}
+      indicatorStyle={{ backgroundColor: "#FF9100" }}
+      style={{ backgroundColor: "white", elevation: 0, marginHorizontal: 10 }}
     />
   );
   return (

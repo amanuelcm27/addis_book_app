@@ -1,9 +1,5 @@
 import React, { memo, useCallback, useMemo, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { router } from "expo-router";
@@ -12,15 +8,18 @@ const SideBar = ({ navigation }) => {
   const navigateTo = useCallback((route) => {
     router.push(route);
   }, []);
-  const menuItems = useMemo(() => [
-    { label: "Account", icon: "fa-user", route: "/setting" },
-    { label: "Genre", icon: "fa-meteor", route: "/search" },
-    { label: "Authors", icon: "fa-user-pen", route: "/authors" },
-    { label: "Narrators", icon: "fa-wave-square", route: "/narrators" },
-    { label: "About us", icon: "fa-users", route: "/aboutus" },
-    { label: "FAQ", icon: "fa-question", route: "/faq" },
-    { label: "Support", icon: "fa-comment", route: "/support" },
-  ], []);
+  const menuItems = useMemo(
+    () => [
+      { label: "Account", icon: "fa-user", route: "/setting" },
+      { label: "Genre", icon: "fa-meteor", route: "/search" },
+      { label: "Authors", icon: "fa-user-pen", route: "/authors" },
+      { label: "Narrators", icon: "fa-wave-square", route: "/narrators" },
+      { label: "About us", icon: "fa-users", route: "/aboutus" },
+      { label: "FAQ", icon: "fa-question", route: "/faq" },
+      { label: "Support", icon: "fa-comment", route: "/support" },
+    ],
+    []
+  );
   return (
     <SafeAreaView
       style={{
@@ -50,7 +49,7 @@ const SideBar = ({ navigation }) => {
               backgroundColor: "white",
             }}
             onPress={() => {
-             navigateTo(item.route)
+              navigateTo(item.route);
             }}
           >
             <FontAwesomeIcon icon={item.icon} size={22} />
@@ -69,8 +68,8 @@ const SideBar = ({ navigation }) => {
       </View>
       <TouchableOpacity
         onPress={() => {
-          navigateTo(item.route)
-         }}
+          router.push("/terms");
+        }}
         className="flex-row"
       >
         <Text className=" text-gray-500 font-primaryRegular flex-1">

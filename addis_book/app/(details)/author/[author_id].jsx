@@ -1,11 +1,13 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import images from "../../constants/images";
+import images from "../../../constants/images";
 import { StatusBar } from "expo-status-bar";
-import BookCardContainer from "../../components/BookCardContainer";
-import BackButton from "../../components/BackButton";
+import BookCardContainer from "../../../components/BookCardContainer";
+import BackButton from "../../../components/BackButton";
+import { useLocalSearchParams } from "expo-router";
+import { apiRequest } from "../../../utils/apiRequest";
 const AuthorDetail = () => {
   const trendingBooks = [
     {
@@ -29,6 +31,22 @@ const AuthorDetail = () => {
       type: "audio",
     },
   ];
+  const [author , setAuthor] = useState({});
+  
+  const  { author_id } = useLocalSearchParams();
+  const fetchAuthor = async () => { 
+    const response = await apiRequest("get", `/author/${author_id}`);
+    if (response.success) {
+      setAuthor(response.data);
+      console.log(response.data);
+    } else {
+      console.log(response.error);
+    }
+  }
+  useEffect(() => {
+    fetchAuthor();
+    console.log(author)
+  }, [author_id]);
   return (
     <>
       <SafeAreaView className="h-full">
@@ -36,13 +54,15 @@ const AuthorDetail = () => {
           <View className="h-[150px] relative">
             <View className="bg-[#EF0FA0] h-[100px] flex justify-end items-end">
               <Text className="text-2xl p-4 text-white font-primaryExtraBoldItalic">
-                Mj Demarco
+                {author?.name}
               </Text>
             </View>
 
             <Image
               className="absolute w-28 h-28 mx-4 bottom-0 rounded-full"
-              source={images.mjd}
+              source={{
+                uri:author?.photo
+              }}
             />
             <View className="ml-auto mr-8 my-4">
               <FontAwesomeIcon icon="fa-user-pen" size={32} />
@@ -52,18 +72,15 @@ const AuthorDetail = () => {
             <Text className="text-xl font-primaryItalic">About Author</Text>
             <View className="border-l-2 border-gray-300 my-2 p-4">
               <Text className="text-base font-primaryRegular">
-                MJ DeMarco is a semi-retired entrepreneur, investor, advisor,
-                and international best-selling author who has started and sold
-                two multi-million-dollar companies—Limos.com and a publishing
-                company, Viperion Publishing Corp.
+                {author?.about}
               </Text>
             </View>
           </View>
           <View className="my-4 mx-4">
             <Text className="text-xl font-primaryItalic">
-              Books by Mj Demarco
+              Books by {author?.name}
             </Text>
-            <BookCardContainer trendingBooks={trendingBooks} />
+            <BookCardContainer books={author?.books || []} />
           </View>
         </ScrollView>
         <BackButton />
