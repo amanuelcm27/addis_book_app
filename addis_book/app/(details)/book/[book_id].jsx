@@ -123,7 +123,7 @@ const BookDetail = memo(() => {
                 </View>
                 <View className="w-1/2 py-2">
                   <Text className="font-primaryBold">Genre</Text>
-                  <Text className="text-gray-600">
+                  <Text className="text-gray-600 pr-2">
                     {book.genre?.map((item) => `${item.name},`)}
                   </Text>
                 </View>
@@ -136,7 +136,7 @@ const BookDetail = memo(() => {
           </Animated.ScrollView>
 
           <CustomButton
-            text="Buy ($20)"
+            text={`Buy ${book.price}`}
             background="bg-[#FF9100]"
             textColor="text-white"
             onClick={handleBuying}

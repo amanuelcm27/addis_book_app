@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import images from "../../../constants/images";
@@ -8,6 +8,7 @@ import BookCardContainer from "../../../components/BookCardContainer";
 import BackButton from "../../../components/BackButton";
 import { useLocalSearchParams } from "expo-router";
 import { apiRequest } from "../../../utils/apiRequest";
+import { set } from "react-native-reanimated";
 const NarratorDetail = () => {
   const trendingBooks = [
     {
@@ -29,31 +30,38 @@ const NarratorDetail = () => {
       type: "audio",
     },
   ];
-  const { narrator_id } = useLocalSearchParams();
+  const { narrator_id , currentColor } = useLocalSearchParams();
   const [narrator, setNarrator] = useState({});
-  const fetchNarrator = async () => { 
+  const fetchNarrator = async () => {
     const response = await apiRequest("get", `/narrator/${narrator_id}`);
-    if (response.success) { 
-      
+    if (response.success) {
+      setNarrator(response.data);
+    } else {
+      console.log(response.error);
     }
-  }
+  };
   useEffect(() => {
+    fetchNarrator();
 
-  } , [narrator_id])
+  }, [narrator_id]);
+  console.log(narrator);
+  
   return (
     <>
       <SafeAreaView className="h-full">
         <ScrollView>
           <View className="h-[150px] relative">
-            <View className="bg-[#EF0FA0] h-[100px] flex justify-end items-end">
+            <View style={{backgroundColor:currentColor ? currentColor : "black"  }} className=" h-[100px] flex justify-end items-end">
               <Text className="text-2xl p-4 text-white font-primaryExtraBoldItalic">
-                 Demarco
+                {narrator?.name}
               </Text>
             </View>
 
             <Image
               className="absolute w-28 h-28 mx-4 bottom-0 rounded-full"
-              source={images.mjd}
+              source={{
+                uri: narrator?.photo,
+              }}
             />
             <View className="ml-auto mr-8 my-4">
               <FontAwesomeIcon icon={"fa-wave-square"} size={32} />
@@ -63,23 +71,20 @@ const NarratorDetail = () => {
             <Text className="text-xl font-primaryItalic">About Narrator</Text>
             <View className="border-l-2 border-gray-300 my-2 p-4">
               <Text className="text-base font-primaryRegular">
-                MJ DeMarco is a Narrator
-                and international best-narrator who has started and sold
-                two multi-million-dollar companies—Limos.com and a publishing
-                company, Viperion Publishing Corp.
+                {narrator?.about}
               </Text>
             </View>
           </View>
           <View className="my-4 mx-4">
             <Text className="text-xl font-primaryItalic">
-              Narrations by Mj Demarco
+              Narrations by {narrator?.name}
             </Text>
-            <BookCardContainer books={trendingBooks} />
+            <BookCardContainer books={narrator?.narrated_books || []} />
           </View>
         </ScrollView>
         <BackButton />
       </SafeAreaView>
-      <StatusBar backgroundColor="#EF0FA0" style="light" />
+      <StatusBar backgroundColor={`${currentColor ? currentColor : "black"}`} style="light" />
     </>
   );
 };

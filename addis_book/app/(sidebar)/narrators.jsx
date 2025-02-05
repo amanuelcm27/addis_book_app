@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../../components/FormField";
 import images from "../../constants/images";
@@ -7,21 +7,10 @@ import ContentHeader from "../../components/ContentHeader";
 import { router } from "expo-router";
 import BackButton from "../../components/BackButton";
 import CreatorCard from "../../components/CreatorCard";
+import { apiRequest } from "../../utils/apiRequest";
 
 const narrators = () => {
-  const filters = [
-    { id: "1", filter: "J.K. Rowling" },
-    { id: "2", filter: "George R.R. Martin" },
-    { id: "3", filter: "Stephen King" },
-    { id: "4", filter: "Jane Austen" },
-    { id: "5", filter: "Mark Twain" },
-    { id: "6", filter: "Agatha Christie" },
-    { id: "7", filter: "J.R.R. Tolkien" },
-    { id: "8", filter: "Ernest Hemingway" },
-    { id: "9", filter: "F. Scott Fitzgerald" },
-    { id: "10", filter: "Oscar Wilde" },
-  ];
-
+  const [searchText, setSearchText] = useState(""); 
   const colors = [
     "#EF0FA0", // pink
     "#BB07DF", // purple
@@ -32,23 +21,62 @@ const narrators = () => {
     "#F0A211", // yellow
     "#62615F", // dark gray
   ];
-
+  const [narrators, setNarrators] = useState([]);
+  const fetchNarrators = async () => {
+    const response = await apiRequest("get", "/narrators");
+    if (response.success) {
+      setNarrators(response.data);
+    } else {
+      console.log(response.error);
+    }
+  };
+  const searchNarrators = async () => {
+    const response = await apiRequest(
+      "get",
+      `/narrator-search?narrator=${searchText}`
+    );
+    if (response.success) {
+      setNarrators(response.data);
+    } else {
+      console.log(response.error);
+    }
+  };
+  const clearSearch = () => { 
+    setSearchText("");
+    fetchNarrators();
+  }
+  useEffect(() => {
+    fetchNarrators();
+  }, []);
   return (
-    <SafeAreaView className="h-full">
+    <SafeAreaView className="h-full bg-white">
       <ScrollView>
         <ContentHeader text={"search for Narrators"} icon={"fa-wave-square"} />
         <View>
           <FormField
+            value={searchText}
+            onChangeText={setSearchText}
+            onSubmitEditing={searchNarrators}
             containerStyle={"mx-4"}
             inputContainerStyle={"rounded-full"}
             inputStyle={"text-black font-primaryRegular"}
             placeholder={"search by Narrator"}
+            returnKeyType="search"
+            type="search"
+            otherFunction={clearSearch}
+
           />
         </View>
         <View className="w-full p-2 my-4">
-          <View className="flex-row flex-wrap items-center justify-center gap-2">
-            {filters.map((item, index) => (
-              <CreatorCard route={'narrator'} key={index} item={item} index={index} colors={colors} />
+          <View className="flex-row flex-wrap items-center  gap-2">
+            {narrators.map((item, index) => (
+              <CreatorCard
+                route={`/narrator/${item.id}`}
+                key={index}
+                item={item}
+                index={index}
+                colors={colors}
+              />
             ))}
           </View>
         </View>

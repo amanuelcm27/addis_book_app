@@ -6,14 +6,13 @@ import images from "../constants/images";
 import { router } from "expo-router";
 import { useAuth } from "../context/AuthContext";
 const index = () => {
-  const { user , loading } = useAuth();
-  console.log('log from index',user , loading)
+  const { user, loading } = useAuth();
   return (
     <>
-      <SafeAreaView className='h-full bg-[#FF9100]'>
+      <SafeAreaView className="h-full bg-[#FF9100]">
         <View className=" h-[80%] items-center justify-center ">
           <View>
-            <Image source={images.logo} className='w-68 h-68'/>
+            <Image source={images.logo} className="w-68 h-68" />
           </View>
           <View className="items-center">
             <Text className="text-white text-4xl font-primaryExtraBoldItalic">
@@ -25,14 +24,17 @@ const index = () => {
           </View>
         </View>
         <View className="my-8 mx-4">
-          <TouchableOpacity onPress={()=>router.push('/home')} className=" bg-white p-6 rounded-full mt-4 w-full shadow-lg shadow-black ">
-            <Text  className="text-black text-4xl  text-center font-primaryBlackItalic">
+          <TouchableOpacity
+            onPress={() => router.push("/home")}
+            className=" bg-white p-6 rounded-full mt-4 w-full shadow-lg shadow-black "
+          >
+            <Text className="text-black text-4xl  text-center font-primaryBlackItalic">
               Get Started
             </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-      <StatusBar  style="light" />
+      <StatusBar style="light" />
     </>
   );
 };
