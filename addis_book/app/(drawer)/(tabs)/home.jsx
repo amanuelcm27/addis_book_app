@@ -13,28 +13,6 @@ import { apiRequest } from "../../../utils/apiRequest";
 
 const Home = () => {
   const navigation = useNavigation();
-  const trendingBooks = [
-    {
-      id: "1",
-      imageSource: images.animal,
-      title: "Animal Farm",
-      type: "audio",
-    },
-    { id: "2", imageSource: images.atlas, title: "Atlas" },
-    {
-      id: "3",
-      imageSource: images.got,
-      title: "Game of Thrones",
-      type: "audio",
-    },
-    { id: "4", imageSource: images.htw, title: "How to Win Friends" },
-    {
-      id: "5",
-      imageSource: images.unscripted,
-      title: "Unscripted",
-      type: "audio",
-    },
-  ];
   const [books, setBooks] = useState([]);
   const fetchBooks = async () => {
     const response = await apiRequest("get", "/books");

@@ -11,6 +11,8 @@ import FormField from "../../../components/FormField";
 import LargeBookCard from "../../../components/LargeBookCard";
 import ContentHeader from "../../../components/ContentHeader";
 import { apiRequest } from "../../../utils/apiRequest";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { counter } from "@fortawesome/fontawesome-svg-core";
 
 const Search = () => {
   const [sampleBooks, setSampleBooks] = useState([]);
@@ -63,17 +65,20 @@ const Search = () => {
 
   const filterByGenres = async () => {
     console.log(selectedGenres);
-    // if (selectedGenres.length === 0) {
-    //   setFilteredBooks(sampleBooks); // Reset to all books if no genre is selected
-    //   return;
-    // }
+    if (selectedGenres.length === 0) {
+      setFilteredBooks(sampleBooks); // Reset to all books if no genre is selected
+      return;
+    }
 
-    // const response = await apiRequest("get", `/filter?genres=${selectedGenres.join(",")}`);
-    // if (response.success) {
-    //   setFilteredBooks(response.data);
-    // } else {
-    //   console.log(response.error);
-    // }
+    const response = await apiRequest(
+      "get",
+      `/filter?genres=${selectedGenres}`
+    );
+    if (response.success) {
+      setFilteredBooks(response.data);
+    } else {
+      console.log(response.error);
+    }
   };
 
   useEffect(() => {
@@ -103,7 +108,7 @@ const Search = () => {
             otherFunction={clearSearch}
           />
         </View>
-        <View className="mx-4 items-center my-4">
+        <View className="mx-4  my-4">
           <FlatList
             data={genres}
             keyExtractor={(item) => item.id.toString()}
@@ -130,12 +135,22 @@ const Search = () => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ gap: 4 }}
           />
+          {selectedGenres.length > 0 && (
+            <View className='flex-row items-center'>
+              <Text>{selectedGenres.length} filter applied</Text>
+              <TouchableOpacity
+                className="ml-auto flex-row items-center rounded-full bg-[#f7f7f7] p-2 "
+                onPress={() => setSelectedGenres([])}
+              >
+                <Text className="font-primaryRegular">clear filters </Text>
+                <FontAwesomeIcon icon="fa-close" />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
         <View className="flex-row flex-wrap justify-between mx-4 my-6">
           {filteredBooks.length > 0 &&
-            filteredBooks
-              .slice(0, 4)
-              .map((book) => (
+            filteredBooks.map((book) => (
                 <LargeBookCard
                   key={book.id}
                   styles="w-[48%] mb-4"

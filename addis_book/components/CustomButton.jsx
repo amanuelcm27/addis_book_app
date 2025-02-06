@@ -11,7 +11,7 @@ const CustomButton = ({
   return (
     <View className="my-8 mx-4">
       <TouchableOpacity
-      activeOpacity={0.7}
+        activeOpacity={0.7}
         onPress={!isLoading && onClick}
         disabled={isLoading}
         className={`${background} p-4 rounded-full mt-4 w-full shadow-lg shadow-black `}

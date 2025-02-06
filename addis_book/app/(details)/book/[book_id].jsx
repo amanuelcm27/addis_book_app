@@ -23,6 +23,7 @@ const BookDetail = memo(() => {
   const { user, loading } = useAuth();
   const pathname = usePathname();
   const { book_id } = useLocalSearchParams();
+
   const handleBuying = () => {
     if (!loading && !user) {
       router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
@@ -30,6 +31,7 @@ const BookDetail = memo(() => {
       setShowCheckoutBox(true);
     }
   };
+
   const [book, setBook] = useState({});
   const [loadingBook, setLoadingBook] = useState(true);
   const fetchBook = async () => {
@@ -63,32 +65,32 @@ const BookDetail = memo(() => {
             )}
             scrollEventThrottle={16}
           >
-            <View className="mx-6 my-4 flex-row">
-              <View className="flex-1">
-                <Text className="text-2xl font-primaryBlackItalic">
+            <View className="mx-4 my-4 flex-row ">
+              <View className='flex-1'>
+                <Text className="text-2xl font-primaryBlackItalic ">
                   {book.title}
                 </Text>
                 <Text className="text-lg font-primaryItalic text-gray-500">
                   by {book.author?.name}
                 </Text>
               </View>
+            </View>
 
-              <View className="ml-auto flex-row gap-2">
-                <TouchableOpacity activeOpacity={0.5}>
-                  <FontAwesomeIcon
-                    icon="fa-play-circle"
-                    color="#FF9100"
-                    size={30}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.5}>
-                  <FontAwesomeIcon
-                    icon="fa-book-open"
-                    color="#FF9100"
-                    size={30}
-                  />
-                </TouchableOpacity>
-              </View>
+            <View className=" mx-4 flex-row gap-2">
+              <TouchableOpacity activeOpacity={0.5}>
+                <FontAwesomeIcon
+                  icon="fa-play-circle"
+                  color="#FF9100"
+                  size={30}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.5}>
+                <FontAwesomeIcon
+                  icon="fa-book-open"
+                  color="#FF9100"
+                  size={30}
+                />
+              </TouchableOpacity>
             </View>
             <View className="mx-6">
               <Text className="font-primaryRegular py-4">Summary</Text>
@@ -124,19 +126,27 @@ const BookDetail = memo(() => {
                 <View className="w-1/2 py-2">
                   <Text className="font-primaryBold">Genre</Text>
                   <Text className="text-gray-600 pr-2">
-                    {book.genre?.map((item) => `${item.name},`)}
+                    {book.genres?.map((item) => `${item.name},`)}
                   </Text>
                 </View>
                 <View className="w-1/2 py-2">
                   <Text className="font-primaryBold">Language</Text>
                   <Text className="text-gray-600">{book.language}</Text>
                 </View>
+                <View className="w-1/2 py-2">
+                  <Text className="font-primaryBold">Published</Text>
+                  <Text className="text-gray-600">{book.published || "N/A"}</Text>
+                </View>
+                <View className="w-1/2 py-2">
+                  <Text className="font-primaryBold">Pages</Text>
+                  <Text className="text-gray-600">{book.page_count || "N/A"}</Text>
+                </View>
               </View>
             </View>
           </Animated.ScrollView>
 
           <CustomButton
-            text={`Buy ${book.price}`}
+            text={`Buy ${book.price} ${book.currency}`}
             background="bg-[#FF9100]"
             textColor="text-white"
             onClick={handleBuying}
