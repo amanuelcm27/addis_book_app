@@ -2,35 +2,30 @@ import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../../components/FormField";
-import images from "../../constants/images";
 import ContentHeader from "../../components/ContentHeader";
-import { router } from "expo-router";
 import BackButton from "../../components/BackButton";
 import CreatorCard from "../../components/CreatorCard";
 import { apiRequest } from "../../utils/apiRequest";
+import InfoCard from "../../components/InfoCard";
+import Skeleton from "../../components/SkeletonLoader";
+import { colors } from "../../constants/colors";
 
 const narrators = () => {
-  const [searchText, setSearchText] = useState(""); 
-  const colors = [
-    "#EF0FA0", // pink
-    "#BB07DF", // purple
-    "#00B200", // green
-    "#142F66", // blue
-    "#EE1C1C", // red
-    "#5598A0", // light blue
-    "#F0A211", // yellow
-    "#62615F", // dark gray
-  ];
+  const [searchText, setSearchText] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [info, setInfo] = useState(null);
   const [narrators, setNarrators] = useState([]);
   const fetchNarrators = async () => {
     const response = await apiRequest("get", "/narrators");
     if (response.success) {
       setNarrators(response.data);
     } else {
-      console.log(response.error);
+      setInfo(response.error);
     }
+    setLoading(false);
   };
   const searchNarrators = async () => {
+    setLoading(true);
     const response = await apiRequest(
       "get",
       `/narrator-search?narrator=${searchText}`
@@ -38,51 +33,67 @@ const narrators = () => {
     if (response.success) {
       setNarrators(response.data);
     } else {
-      console.log(response.error);
+      setInfo(response.error);
     }
+    setLoading(false);
   };
-  const clearSearch = () => { 
+  const clearSearch = () => {
     setSearchText("");
     fetchNarrators();
-  }
+  };
   useEffect(() => {
     fetchNarrators();
   }, []);
   return (
-    <SafeAreaView className="h-full bg-white">
-      <ScrollView>
-        <ContentHeader text={"search for Narrators"} icon={"fa-wave-square"} />
-        <View>
-          <FormField
-            value={searchText}
-            onChangeText={setSearchText}
-            onSubmitEditing={searchNarrators}
-            containerStyle={"mx-4"}
-            inputContainerStyle={"rounded-full"}
-            inputStyle={"text-black font-primaryRegular"}
-            placeholder={"search by Narrator"}
-            returnKeyType="search"
-            type="search"
-            otherFunction={clearSearch}
-
+    <>
+      <InfoCard info={info} setInfo={setInfo} />
+      <SafeAreaView className="h-full bg-white">
+        <ScrollView>
+          <ContentHeader
+            text={"search for Narrators"}
+            icon={"fa-wave-square"}
           />
-        </View>
-        <View className="w-full p-2 my-4">
-          <View className="flex-row flex-wrap items-center  gap-2">
-            {narrators.map((item, index) => (
-              <CreatorCard
-                route={`/narrator/${item.id}`}
-                key={index}
-                item={item}
-                index={index}
-                colors={colors}
-              />
-            ))}
+          <View>
+            <FormField
+              value={searchText}
+              onChangeText={setSearchText}
+              onSubmitEditing={searchNarrators}
+              containerStyle={"mx-4"}
+              inputContainerStyle={"rounded-full"}
+              inputStyle={"text-black font-primaryRegular"}
+              placeholder={"search by Narrator"}
+              returnKeyType="search"
+              type="search"
+              otherFunction={clearSearch}
+            />
           </View>
-        </View>
-      </ScrollView>
-      <BackButton />
-    </SafeAreaView>
+          <View className="w-full p-2 my-4">
+            <View className="flex-row flex-wrap items-center  gap-2">
+              {loading
+                ? Array.from({ length: 6 }).map((_, index) => (
+                    <Skeleton
+                      key={index}
+                      isLoading={true}
+                      customStyles={"w-[48%]"}
+                    >
+                      <View className="w-[48%] h-[120px]"></View>
+                    </Skeleton>
+                  ))
+                : narrators.map((item, index) => (
+                    <CreatorCard
+                      route={`/narrator/${item.id}`}
+                      key={index}
+                      item={item}
+                      index={index}
+                      colors={colors()}
+                    />
+                  ))}
+            </View>
+          </View>
+        </ScrollView>
+        <BackButton />
+      </SafeAreaView>
+    </>
   );
 };
 

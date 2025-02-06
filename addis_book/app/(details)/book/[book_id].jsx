@@ -14,7 +14,6 @@ import images from "../../../constants/images";
 import { StatusBar } from "expo-status-bar";
 import Checkout from "../../(checkout)/checkout";
 import { useAuth } from "../../../context/AuthContext";
-import api from "../../../utils/api";
 import DetailScreenHeader from "../../../components/DetailScreenHeader";
 import { apiRequest } from "../../../utils/apiRequest";
 const BookDetail = memo(() => {

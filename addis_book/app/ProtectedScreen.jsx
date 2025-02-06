@@ -8,7 +8,6 @@ import { View } from "react-native-animatable";
 const ProtectedScreen = ({ children }) => {
   const { user, loading } = useAuth();
   const pathname = usePathname(); // Get current screen path
-  console.log("log from ProtectedScreen", pathname);
   useEffect(() => {
     if (!loading && !user) {
       router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);

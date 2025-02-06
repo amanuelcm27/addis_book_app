@@ -14,7 +14,8 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view"; // Keep TabVi
 import api from "../../../utils/api";
 import { RefreshControl } from "react-native-gesture-handler";
 import { apiRequest } from "../../../utils/apiRequest";
-
+import Skeleton from "../../../components/SkeletonLoader";
+import InfoCard from "../../../components/InfoCard";
 
 const trendingBooks = [
   { id: "1", imageSource: images.animal, title: "Animal Farm", type: "audio" },
@@ -44,41 +45,53 @@ const RecentPlayed = () => {
 const AllAudio = () => {
   const [books, setBooks] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-
+  const [loading, setLoading] = useState(true);
+  const [info, setInfo] = useState(null);
   const handleRefresh = async () => {
+    setLoading(true);
     setRefreshing(true);
     await fetchBooks();
     setRefreshing(false);
+    setLoading(false);
   };
   const fetchBooks = async () => {
     const response = await apiRequest("get", "/audiobooks");
     if (response.success) {
       setBooks(response.data);
-      console.log(response.data);
+      setLoading(false);
     } else {
-      console.log(response.error);
+      setInfo(response.error);
     }
   };
   useEffect(() => {
     fetchBooks();
   }, []);
   return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-      }
-    >
-      <View className="flex-row flex-wrap justify-between mx-4 my-6">
-        {books.map((book) => (
-          <LargeBookCard
-            key={book.id}
-            styles={"w-[48%] mb-4"}
-            hasAudio={true}
-            item={book}
-          />
-        ))}
-      </View>
-    </ScrollView>
+    <>
+      <InfoCard info={info} setInfo={setInfo} />
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      >
+        <View className="flex-row flex-wrap justify-between mx-4 my-6">
+          {loading
+            ? Array.from({ length: 4 }).map((_, index) => (
+                <Skeleton key={index} isLoading={true}>
+                  <View className="h-[300px] w-[170px] m-2 relative rounded-xl bg-white overflow-hidden"></View>
+                </Skeleton>
+              ))
+            : books.map((book) => (
+                <LargeBookCard
+                  key={book.id}
+                  styles={"w-[48%] mb-4"}
+                  hasAudio={true}
+                  item={book}
+                />
+              ))}
+        </View>
+      </ScrollView>
+    </>
   );
 };
 

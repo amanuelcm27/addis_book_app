@@ -1,8 +1,9 @@
-import { View, Text  , FlatList} from "react-native";
+import { View, Text, FlatList } from "react-native";
 import React, { useState } from "react";
 import LargeBookCard from "./LargeBookCard";
+import Skeleton from "./SkeletonLoader";
 
-const BookCardContainer = ({ books , contains }) => {
+const BookCardContainer = ({ books, contains, loading }) => {
   const [activeItem, setActiveItem] = useState(books[0]?.id);
 
   const viewableItemsChanged = ({ viewableItems }) => {
@@ -10,20 +11,27 @@ const BookCardContainer = ({ books , contains }) => {
       setActiveItem(viewableItems[0]?.key);
     }
   };
+
   return (
     <View className="mx-2 my-4">
       <Text className="font-primaryBlack text-2xl mb-4">{contains}</Text>
       <FlatList
-        data={books}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <LargeBookCard
-            activeItem={activeItem}
-            item={item}
-            styles={'w-[170px]'}
-            animate={true}
-          />
-        )}
+        data={loading ? Array.from({ length: 4 }) : books} // When loading, show 6 skeletons
+        keyExtractor={(item, index) => (item?.id ? item.id : index.toString())} // Key for skeletons if no id
+        renderItem={({ item }) =>
+          loading ? (
+            <Skeleton isLoading={true}>
+              <View className="h-[300px] w-[170px] relative rounded-xl bg-white overflow-hidden"></View>
+            </Skeleton>
+          ) : (
+            <LargeBookCard
+              activeItem={activeItem}
+              item={item}
+              styles={"w-[170px]"}
+              animate={true}
+            /> 
+          )
+        }
         horizontal
         showsHorizontalScrollIndicator={false}
         onViewableItemsChanged={viewableItemsChanged}

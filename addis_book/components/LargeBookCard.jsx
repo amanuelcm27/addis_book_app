@@ -22,14 +22,23 @@ const zoomOut = {
   },
 };
 
-const LargeBookCard = ({ activeItem, item, styles,hasAudio, animate = false }) => {
+const LargeBookCard = ({
+  activeItem,
+  item,
+  styles,
+  hasAudio,
+  animate = false,
+}) => {
   const CardContent = (
     <TouchableOpacity
       onPress={() => router.push(`/book/${item.id}`)}
       activeOpacity={0.85}
       className={`h-[300px] relative rounded-xl bg-white overflow-hidden ${styles}`}
     >
-      <Image className=" w-full h-full rounded-xl" source={{ uri:item.cover}} />
+      <Image
+        className=" w-full h-full rounded-xl"
+        source={{ uri: item.cover }}
+      />
       {hasAudio && (
         <TouchableOpacity
           activeOpacity={0.8}

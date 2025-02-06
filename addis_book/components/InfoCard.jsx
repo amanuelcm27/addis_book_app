@@ -35,13 +35,13 @@ const InfoCard = ({ info, setInfo }) => {
   return (
     <>
       {isVisible && (
-        <View className="bg-transparent flex justify-center items-center h-full w-full absolute z-10 top-0">
+        <View className="bg-[rgba(0,0,0,0.3)] justify-center items-center h-full w-full absolute z-50 top-0 left-0 ">
           <Animated.View
             style={{
               transform: [{ scale: scaleAnim }], 
               opacity: opacityAnim, 
             }}
-            className="bg-white p-6 h-[170px] w-[80%] rounded-lg shadow-sm"
+            className="bg-white p-6 h-[150px] w-[80%] rounded-lg shadow-sm"
           >
             <Text className="font-primarySemiBold py-4 text-black">{info}</Text>
             <TouchableOpacity
