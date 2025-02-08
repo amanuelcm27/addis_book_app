@@ -16,6 +16,7 @@ import { counter } from "@fortawesome/fontawesome-svg-core";
 import { set } from "react-native-reanimated";
 import InfoCard from "../../../components/InfoCard";
 import Skeleton from "../../../components/SkeletonLoader";
+import GenreItem from "../../../components/GenreItem";
 
 const Search = () => {
   const [sampleBooks, setSampleBooks] = useState([]);
@@ -75,7 +76,7 @@ const Search = () => {
 
   const filterByGenres = async () => {
     if (selectedGenres.length === 0) {
-      setFilteredBooks(sampleBooks); 
+      setFilteredBooks(sampleBooks);
       return;
     }
     setLoading(true);
@@ -127,22 +128,11 @@ const Search = () => {
               renderItem={({ item }) => {
                 const isSelected = selectedGenres.includes(item.id);
                 return (
-                  <TouchableOpacity
-                    activeOpacity={0.85}
-                    onPress={() => toggleGenreSelection(item.id)}
-                  >
-                    <View
-                      className={`rounded-full my-2 p-4 shadow-sm shadow-black ${
-                        isSelected ? "bg-[#FF9100]" : "bg-white"
-                      }`}
-                    >
-                      <Text
-                        className={isSelected ? "text-white" : "text-black"}
-                      >
-                        {item.name}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
+                  <GenreItem
+                    item={item}
+                    isSelected={isSelected}
+                    toggleGenreSelection={toggleGenreSelection}
+                  />
                 );
               }}
               horizontal
@@ -165,10 +155,12 @@ const Search = () => {
           <View className="flex-row flex-wrap justify-between mx-4 my-6">
             {loading
               ? Array.from({ length: 4 }).map((_, index) => (
-                  <Skeleton key={index} isLoading={true}>
-                    <View
-                      className="h-[300px] w-[170px] m-2 relative rounded-xl bg-white overflow-hidden"
-                    ></View>
+                  <Skeleton
+                    key={index}
+                    isLoading={true}
+                    customStyles={"w-[48%]"}
+                  >
+                    <View className="h-[300px] w-[170px] m-2 relative rounded-xl bg-white overflow-hidden"></View>
                   </Skeleton>
                 ))
               : filteredBooks.map((book) => (

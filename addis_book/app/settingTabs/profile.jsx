@@ -1,20 +1,41 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import images from "../../constants/images";
-
-
+import { useAuth } from "../../context/AuthContext";
+import apiRequest from "../../utils/apiRequest";
+import InfoCard from "../../components/InfoCard"
 const profile = () => {
+  const [loading , setLoading ] = useState(true);
+  const { user } = useAuth();
+  const [info , setInfo ] = useState(null);
+  // const fetchUser = async () => {
+  //   const response = await apiRequest('get', '/user');
+  //   if (response.success) {
+  //     setUser(response.data); 
+  //     console.log(response.data);
+  //   }
+  //   else {
+  //     setInfo(response.error)
+  //   }
+  //   setLoading(false);
+  // }
+  // useEffect(() => {
+  //   fetchUser();
+  //   console.log(user);
+  // }, []);
+  console.log(user);
   return (
     <View className="mx-4 my-4">
+      <InfoCard info={info} setInfo={setInfo} />
       <Text className="font-primaryBlack text-2xl">Account details</Text>
       <View>
         <View className="flex flex-row justify-between my-4">
           <Text className="font-primaryRegular">Name</Text>
-          <Text className="font-primaryRegular">John Doe</Text>
+          <Text className="font-primaryRegular">{user?.username}</Text>
         </View>
         <View className="flex flex-row justify-between my-4">
           <Text className="font-primaryRegular">Email</Text>
-          <Text className="font-primaryRegular">john@gmail.com</Text>
+          <Text className="font-primaryRegular">{user?.email || "N/A"}</Text>
         </View>
       </View>
       <View className="bg-black rounded-lg p-4 my-4">
@@ -22,7 +43,7 @@ const profile = () => {
         <View className="flex-row items-center">
           <Image source={images.logo} className="w-24 h-24" />
           <View className="">
-            <Text className="text-white">Free plan</Text>
+            <Text className="text-white">{user?.subscription?.type}</Text>
             <TouchableOpacity>
               <Text className="text-white font-primaryBlack text-2xl">
                 Change plan

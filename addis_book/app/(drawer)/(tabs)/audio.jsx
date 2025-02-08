@@ -77,8 +77,8 @@ const AllAudio = () => {
         <View className="flex-row flex-wrap justify-between mx-4 my-6">
           {loading
             ? Array.from({ length: 4 }).map((_, index) => (
-                <Skeleton key={index} isLoading={true}>
-                  <View className="h-[300px] w-[170px] m-2 relative rounded-xl bg-white overflow-hidden"></View>
+                <Skeleton key={index} isLoading={true} customStyles={'w-[48%]'}>
+                  <View className="h-[300px] m-2 relative rounded-xl bg-white overflow-hidden"></View>
                 </Skeleton>
               ))
             : books.map((book) => (
