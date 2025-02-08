@@ -1,54 +1,34 @@
-import {   View,
-    Text,
-    Image,
-    ScrollView,
-    ImageBackground,
-    TouchableOpacity,
-    Animated,
-    ActivityIndicator,} from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  ImageBackground,
+  TouchableOpacity,
+  Animated,
+  ActivityIndicator,
+} from "react-native";
 import React from "react";
 import { router } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 const DetailScreenHeader = ({ book, scrollY }) => {
+
   const imageScale = scrollY.interpolate({
-    inputRange: [0, 150], // Scale until 150px of scroll
-    outputRange: [1, 0.2], // Shrink to 50% of original size
-    extrapolate: "clamp",
-  });
-
-  const imageTranslateY = scrollY.interpolate({
-    inputRange: [0, 150],
-    outputRange: [0, 20], // Move upwards
-    extrapolate: "clamp",
-  });
-
-  const imageTranslateX = scrollY.interpolate({
-    inputRange: [0, 150],
-    outputRange: [0, -20], // Move towards the back button
-    extrapolate: "clamp",
-  });
-  const headerHeight = scrollY.interpolate({
-    inputRange: [0, 150],
-    outputRange: [200, 60],
-    extrapolate: "clamp",
-  });
-
-  const imageBackgroundHeight = scrollY.interpolate({
-    inputRange: [0, 150],
-    outputRange: [150, 50],
+    inputRange: [0, 150], // When scrolled down 150 pixels
+    outputRange: [1, 0], // Image shrinks from full size to half
     extrapolate: "clamp",
   });
   return (
-    <Animated.View
+    <View
       style={{
-        height: headerHeight,
+        height: 200,
       }}
-      className=" relative flex-row"
+      className=" relative justify-center flex-row  overflow-hidden"
     >
-      <Animated.View
-        className="w-full"
-        style={{ height: imageBackgroundHeight }}
+      <View
+        className="w-full items-center justify-center"
+        style={{ height: 150 }}
       >
         <ImageBackground
           source={{
@@ -67,14 +47,10 @@ const DetailScreenHeader = ({ book, scrollY }) => {
             </TouchableOpacity>
           </View>
         </ImageBackground>
-      </Animated.View>
+      </View>
       <Animated.View
         style={{
-          transform: [
-            { scale: imageScale },
-            { translateY: imageTranslateY },
-            { translateX: imageTranslateX },
-          ],
+          transform: [{ scale: imageScale }], // Shrink the image based on scroll
         }}
         className="absolute bottom-0 left-0 mx-8"
       >
@@ -85,7 +61,7 @@ const DetailScreenHeader = ({ book, scrollY }) => {
           className="w-36 h-36 rounded-lg"
         />
       </Animated.View>
-    </Animated.View>
+    </View>
   );
 };
 

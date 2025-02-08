@@ -3,8 +3,10 @@ import {
   View,
   Text,
   TouchableOpacity,
+  ScrollView,
   Animated,
   ActivityIndicator,
+  ImageBackground,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -16,12 +18,13 @@ import Checkout from "../../(checkout)/checkout";
 import { useAuth } from "../../../context/AuthContext";
 import DetailScreenHeader from "../../../components/DetailScreenHeader";
 import { apiRequest } from "../../../utils/apiRequest";
+import InfoCard from "../../../components/InfoCard";
 const BookDetail = memo(() => {
-  const scrollY = useRef(new Animated.Value(0)).current;
   const [showCheckoutBox, setShowCheckoutBox] = useState(false);
   const { user, loading } = useAuth();
   const pathname = usePathname();
   const { book_id } = useLocalSearchParams();
+  const [info, setInfo] = useState(null);
 
   const handleBuying = () => {
     if (!loading && !user) {
@@ -30,7 +33,12 @@ const BookDetail = memo(() => {
       setShowCheckoutBox(true);
     }
   };
-
+  const [scrollY, setScrollY] = useState(new Animated.Value(0)); // Scroll position tracker
+  const opacityInterpolate = scrollY.interpolate({
+    inputRange: [0, 100], // When scroll is at 0, opacity is 0. At scroll 100, opacity is 1
+    outputRange: [0, 1], // Fade in
+    extrapolate: "clamp",
+  });
   const [book, setBook] = useState({});
   const [loadingBook, setLoadingBook] = useState(true);
   const fetchBook = async () => {
@@ -38,9 +46,8 @@ const BookDetail = memo(() => {
     if (response.success) {
       setBook(response.data);
       setLoadingBook(false);
-      console.log(response.data);
     } else {
-      console.log(" error log from book detail  ", response.error);
+      setInfo(response.error);
     }
   };
   useEffect(() => {
@@ -49,23 +56,54 @@ const BookDetail = memo(() => {
 
   return (
     <>
+      <InfoCard info={info} setInfo={setInfo} />
       {loadingBook ? (
         <SafeAreaView className="bg-white h-full justify-center items-center">
           <ActivityIndicator size="large" color="#FF9100" />
         </SafeAreaView>
       ) : (
         <SafeAreaView className="bg-white h-full relative">
-          <DetailScreenHeader book={book} scrollY={scrollY} />
-          <Animated.ScrollView
-            showsVerticalScrollIndicator={false}
+          <Animated.View
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: 65,
+              top: 24,
+              zIndex: 50,
+              opacity: opacityInterpolate,
+            }}
+          >
+            <ImageBackground
+              source={{ uri: book.cover }}
+              blurRadius={10}
+              className="flex-row h-full items-center  gap-2 p-4"
+            >
+              <TouchableOpacity onPress={() => router.back()}>
+                <FontAwesomeIcon icon="fa-angle-left" color="white" size={30} />
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.6} className="flex-1">
+                <Text
+                  className="text-white text-lg font-primaryBold"
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {book.title}
+                </Text>
+              </TouchableOpacity>
+            </ImageBackground>
+          </Animated.View>
+
+          <ScrollView
+            style={{ position: "relative", zIndex: 10 }}
             onScroll={Animated.event(
               [{ nativeEvent: { contentOffset: { y: scrollY } } }],
               { useNativeDriver: false }
             )}
             scrollEventThrottle={16}
           >
+            <DetailScreenHeader book={book} scrollY={scrollY} />
             <View className="mx-4 my-4 flex-row ">
-              <View className='flex-1'>
+              <View className="flex-1">
                 <Text className="text-2xl font-primaryBlackItalic ">
                   {book.title}
                 </Text>
@@ -74,7 +112,6 @@ const BookDetail = memo(() => {
                 </Text>
               </View>
             </View>
-
             <View className=" mx-4 flex-row gap-2">
               <TouchableOpacity activeOpacity={0.5}>
                 <FontAwesomeIcon
@@ -134,15 +171,19 @@ const BookDetail = memo(() => {
                 </View>
                 <View className="w-1/2 py-2">
                   <Text className="font-primaryBold">Published</Text>
-                  <Text className="text-gray-600">{book.published || "N/A"}</Text>
+                  <Text className="text-gray-600">
+                    {book.published || "N/A"}
+                  </Text>
                 </View>
                 <View className="w-1/2 py-2">
                   <Text className="font-primaryBold">Pages</Text>
-                  <Text className="text-gray-600">{book.page_count || "N/A"}</Text>
+                  <Text className="text-gray-600">
+                    {book.page_count || "N/A"}
+                  </Text>
                 </View>
               </View>
             </View>
-          </Animated.ScrollView>
+          </ScrollView>
 
           <CustomButton
             text={`Buy ${book.price} ${book.currency}`}
@@ -157,7 +198,7 @@ const BookDetail = memo(() => {
           />
         </SafeAreaView>
       )}
-      <StatusBar style="dark" />
+      <StatusBar style="light" backgroundColor="black" />
     </>
   );
 });

@@ -8,22 +8,6 @@ const profile = () => {
   const [loading , setLoading ] = useState(true);
   const { user } = useAuth();
   const [info , setInfo ] = useState(null);
-  // const fetchUser = async () => {
-  //   const response = await apiRequest('get', '/user');
-  //   if (response.success) {
-  //     setUser(response.data); 
-  //     console.log(response.data);
-  //   }
-  //   else {
-  //     setInfo(response.error)
-  //   }
-  //   setLoading(false);
-  // }
-  // useEffect(() => {
-  //   fetchUser();
-  //   console.log(user);
-  // }, []);
-  console.log(user);
   return (
     <View className="mx-4 my-4">
       <InfoCard info={info} setInfo={setInfo} />

@@ -57,8 +57,8 @@ const Setting = () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsEditing: true,
-      aspect: [1, 1], // Keep the image square
-      quality: 0.7, // Adjust quality (0 - 1
+      aspect: [1, 1],
+      quality: 0.7, 
     });
     if (!result.canceled) {
       const selectedImageUri = result.assets[0].uri;

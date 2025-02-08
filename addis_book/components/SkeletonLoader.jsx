@@ -32,7 +32,6 @@ const Skeleton = ({ isLoading, children, customStyles }) => {
         const { width, height } = event.nativeEvent.layout;
         setLayout({ width, height });
       }}
-      style={{ position: "relative" }}
       className={`${customStyles}`} // Ensure it takes the full width
     >
       {layout && (

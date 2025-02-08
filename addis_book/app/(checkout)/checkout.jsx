@@ -31,8 +31,9 @@ const Checkout = ({ showCheckoutBox, setShowCheckoutBox }) => {
         padding: 15,
         paddingTop: 0,
         elevation: 5,
-        height: animatedHeight, // Animated height
-        overflow: "hidden", // Ensure the content doesn't overflow when height is 0
+        height: animatedHeight, 
+        overflow: "hidden", 
+        zIndex: 1000,
       }}
     >
       <View className="m-2">

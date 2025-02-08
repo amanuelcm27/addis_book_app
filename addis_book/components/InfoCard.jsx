@@ -35,7 +35,7 @@ const InfoCard = ({ info, setInfo }) => {
   return (
     <>
       {isVisible && (
-        <View className="bg-[rgba(0,0,0,0.3)] justify-center items-center h-full w-full absolute z-50 top-0 left-0 ">
+        <View className="bg-[rgba(0,0,0,0.3)] justify-center items-center h-full w-full absolute z-[2000] top-0 left-0 ">
           <Animated.View
             style={{
               transform: [{ scale: scaleAnim }], 
