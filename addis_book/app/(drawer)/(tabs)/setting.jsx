@@ -8,13 +8,11 @@ import {
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { SafeAreaView } from "react-native-safe-area-context";
-import images from "../../../constants/images";
 import shadowStyles from "../../../constants/shadowStyles";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view"; // Import TabBar for TabView
 import profile from "../../settingTabs/profile";
 import plan from "../../settingTabs/plan";
 import downloads from "../../settingTabs/downloads";
-import notifications from "../../settingTabs/Library";
 import { router } from "expo-router";
 import { useAuth } from "../../../context/AuthContext";
 import ProtectedScreen from "../../ProtectedScreen";
@@ -22,7 +20,9 @@ import Library from "../../settingTabs/Library";
 import InfoCard from "../../../components/InfoCard";
 import { apiRequest } from "../../../utils/apiRequest";
 import * as ImagePicker from 'expo-image-picker';
-import { load } from "react-native-track-player/lib/src/trackPlayer";
+
+
+
 const Setting = () => {
   const [index, setIndex] = useState(0);
   const { user, logout , loadUser } = useAuth();

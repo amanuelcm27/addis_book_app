@@ -9,12 +9,12 @@ const CustomButton = ({
   background = "bg-white",
 }) => {
   return (
-    <View className="my-8 mx-4">
+    <View className={`my-8 mx-4`}>
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={!isLoading && onClick}
         disabled={isLoading}
-        className={`${background} p-4 rounded-full mt-4 w-full shadow-lg shadow-black `}
+        className={`${background} p-4 rounded-full mt-2 w-full shadow-lg shadow-black `}
       >
         {isLoading ? (
           <Text className="text-black text-2xl text-center font-primaryBlackItalic">

@@ -62,36 +62,41 @@ const BookDetail = memo(() => {
           <ActivityIndicator size="large" color="#FF9100" />
         </SafeAreaView>
       ) : (
-        <SafeAreaView className="bg-white h-full relative">
-          <Animated.View
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: 65,
-              top: 24,
-              zIndex: 50,
-              opacity: opacityInterpolate,
-            }}
-          >
-            <ImageBackground
-              source={{ uri: book.cover }}
-              blurRadius={10}
-              className="flex-row h-full items-center  gap-2 p-4"
+        <SafeAreaView className="bg-white h-full">
+          <View className='relative'>
+            <Animated.View
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: 65,
+                zIndex: 20,
+                opacity: opacityInterpolate,
+              }}
             >
-              <TouchableOpacity onPress={() => router.back()}>
-                <FontAwesomeIcon icon="fa-angle-left" color="white" size={30} />
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.6} className="flex-1">
-                <Text
-                  className="text-white text-lg font-primaryBold"
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                >
-                  {book.title}
-                </Text>
-              </TouchableOpacity>
-            </ImageBackground>
-          </Animated.View>
+              <ImageBackground
+                source={{ uri: book.cover }}
+                blurRadius={10}
+                className="flex-row h-full items-center  gap-2 p-4 bg-black"
+              >
+                <TouchableOpacity onPress={() => router.back()}>
+                  <FontAwesomeIcon
+                    icon="fa-angle-left"
+                    color="white"
+                    size={30}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.6} className="flex-1">
+                  <Text
+                    className="text-white text-lg font-primaryBold"
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {book.title}
+                  </Text>
+                </TouchableOpacity>
+              </ImageBackground>
+            </Animated.View>
+          </View>
 
           <ScrollView
             style={{ position: "relative", zIndex: 10 }}
