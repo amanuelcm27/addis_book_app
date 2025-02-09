@@ -12,7 +12,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import CustomButton from "../../../components/CustomButton";
 import { router, useLocalSearchParams, usePathname } from "expo-router";
-import images from "../../../constants/images";
 import { StatusBar } from "expo-status-bar";
 import Checkout from "../../(checkout)/checkout";
 import { useAuth } from "../../../context/AuthContext";
@@ -25,7 +24,7 @@ const BookDetail = memo(() => {
   const pathname = usePathname();
   const { book_id } = useLocalSearchParams();
   const [info, setInfo] = useState(null);
-
+  const [ownsBook, setOwnsBook] = useState(false);
   const handleBuying = () => {
     if (!loading && !user) {
       router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
@@ -33,10 +32,10 @@ const BookDetail = memo(() => {
       setShowCheckoutBox(true);
     }
   };
-  const [scrollY, setScrollY] = useState(new Animated.Value(0)); // Scroll position tracker
+  const [scrollY] = useState(new Animated.Value(0)); 
   const opacityInterpolate = scrollY.interpolate({
-    inputRange: [0, 100], // When scroll is at 0, opacity is 0. At scroll 100, opacity is 1
-    outputRange: [0, 1], // Fade in
+    inputRange: [0, 100], 
+    outputRange: [0, 1], 
     extrapolate: "clamp",
   });
   const [book, setBook] = useState({});
@@ -50,9 +49,18 @@ const BookDetail = memo(() => {
       setInfo(response.error);
     }
   };
+  const checkOwnership = async () => { 
+    const response = await apiRequest('post' , '/check-ownership/' , {book_id : book_id});
+    if(response.success){
+      data = response.data;
+      setOwnsBook(response.data.owns_book); 
+    }  
+  }
+  
   useEffect(() => {
-    fetchBook();
-  }, [book_id]);
+    fetchBook(); 
+    checkOwnership(); 
+  }, [book_id]);  
 
   return (
     <>
@@ -63,7 +71,7 @@ const BookDetail = memo(() => {
         </SafeAreaView>
       ) : (
         <SafeAreaView className="bg-white h-full">
-          <View className='relative'>
+          <View className="relative">
             <Animated.View
               style={{
                 position: "absolute",
@@ -73,28 +81,28 @@ const BookDetail = memo(() => {
                 opacity: opacityInterpolate,
               }}
             >
-              <ImageBackground
-                source={{ uri: book.cover }}
-                blurRadius={10}
-                className="flex-row h-full items-center  gap-2 p-4 bg-black"
-              >
-                <TouchableOpacity onPress={() => router.back()}>
-                  <FontAwesomeIcon
-                    icon="fa-angle-left"
-                    color="white"
-                    size={30}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.6} className="flex-1">
-                  <Text
-                    className="text-white text-lg font-primaryBold"
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                  >
-                    {book.title}
-                  </Text>
-                </TouchableOpacity>
-              </ImageBackground>
+                <ImageBackground
+                  source={{ uri: book.cover }}
+                  blurRadius={10}
+                  className="flex-row h-full  items-center  gap-2 p-4"
+                >
+                  <TouchableOpacity onPress={() => router.back()}>
+                    <FontAwesomeIcon
+                      icon="fa-angle-left"
+                      color="white"
+                      size={30}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity activeOpacity={0.6} className="flex-1">
+                    <Text
+                      className="text-white text-lg font-primaryBold"
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {book.title}
+                    </Text>
+                  </TouchableOpacity>
+                </ImageBackground>
             </Animated.View>
           </View>
 
@@ -191,13 +199,16 @@ const BookDetail = memo(() => {
           </ScrollView>
 
           <CustomButton
-            text={`Buy ${book.price} ${book.currency}`}
-            background="bg-[#FF9100]"
+            text={ownsBook ? `In Library` :`Buy ${book.price} ${book.currency}`}
+            background={ownsBook ? 'bg-[#545353]':"bg-[#FF9100]"}
             textColor="text-white"
-            onClick={handleBuying}
+            onClick={ownsBook ? () => router.push('/setting') : handleBuying}
+              
           />
 
           <Checkout
+            checkOwnership={checkOwnership}
+            book={book}
             showCheckoutBox={showCheckoutBox}
             setShowCheckoutBox={setShowCheckoutBox}
           />
