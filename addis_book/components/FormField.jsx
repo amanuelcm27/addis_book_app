@@ -17,6 +17,7 @@ const FormField = ({
   onSubmitEditing,
   returnKeyType,
   otherFunction,
+  inputRef,
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -31,6 +32,7 @@ const FormField = ({
         className={`border-2 flex-row items-center ${inputContainerStyle} justify-center p-2`}
       >
         <TextInput
+          ref={inputRef}
           className={`${inputStyle} flex-1 `}
           placeholder={placeholder}
           placeholderTextColor={placeholderColor}
@@ -53,15 +55,8 @@ const FormField = ({
           </TouchableOpacity>
         )}
         {type === "search" && (
-          <TouchableOpacity
-            className="px-2"
-            onPress={otherFunction}
-          >
-            <FontAwesomeIcon
-              color="black"
-              size={20}
-              icon={faClose}
-            />
+          <TouchableOpacity className="px-2" onPress={otherFunction}>
+            <FontAwesomeIcon color="black" size={20} icon={faClose} />
           </TouchableOpacity>
         )}
       </View>

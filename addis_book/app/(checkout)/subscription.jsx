@@ -10,6 +10,7 @@ import BasicBox from "../../components/BasicBox";
 import PremiumBox from "../../components/PremiumBox";
 import InfoCard from "../../components/InfoCard"
 import { useAuth } from "../../context/AuthContext";
+import { router, useLocalSearchParams } from "expo-router";
 
 const Subscription = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -20,10 +21,12 @@ const Subscription = () => {
     setSelectedPlan(planId);
   };
   const { loadUser } = useAuth();
+  const { redirect } = useLocalSearchParams();
+  console.log(redirect)
   const fetchPlans = async () => {
     const response = await apiRequest("get", "/plans");
     if (response.success) {
-      setPlans(response.data); // Set fetched plans
+      setPlans(response.data); 
     } else {
       setInfo(response.error);
     }
@@ -38,6 +41,7 @@ const Subscription = () => {
     if (response.success) {
       setInfo("Subscribed Successfully")
       loadUser();
+      router.replace(redirect ? decodeURIComponent(redirect) : "/setting");
     }
     else {
       setInfo(response.error)

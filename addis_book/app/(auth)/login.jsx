@@ -39,7 +39,7 @@ const login = () => {
 
       if (!response.success) {
         setIsLoading(false);
-        setInfo(response.error); // Show the error message from the response
+        setInfo(response.error); 
         return;
       }
 
@@ -87,9 +87,9 @@ const login = () => {
                   labelStyle={"text-white"}
                   inputContainerStyle={"border-white"}
                   inputStyle={"text-white"}
-                  label={"username"}
-                  placeholder={"enter your username"}
-                  placeholderColor="rgba(255, 255, 255, 0.7)"
+                  label={"username or email"}
+                  placeholder={"enter your username or email"}
+                  placeholderColor="rgba(255, 255, 255, .8)"
                 />
                 <FormField
                   onChangeText={(value) => handleChange("password", value)}
@@ -100,7 +100,7 @@ const login = () => {
                   label={"Password"}
                   type={"password"}
                   placeholder={"enter your password"}
-                  placeholderColor="rgba(255, 255, 255, 0.7)"
+                  placeholderColor="rgba(255, 255, 255, 0.8)"
                   onSubmitEditing={handleLogin}
                   returnKeyType="done"
                 />
