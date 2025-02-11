@@ -18,6 +18,7 @@ import { useAuth } from "../../../context/AuthContext";
 import DetailScreenHeader from "../../../components/DetailScreenHeader";
 import { apiRequest } from "../../../utils/apiRequest";
 import InfoCard from "../../../components/InfoCard";
+import { debounce } from "lodash";
 const BookDetail = memo(() => {
   const [showCheckoutBox, setShowCheckoutBox] = useState(false);
   const { user, loading } = useAuth();
@@ -45,6 +46,7 @@ const BookDetail = memo(() => {
     if (response.success) {
       setBook(response.data);
       setLoadingBook(false);
+      console.log("book data", response.data);  
     } else {
       setInfo(response.error);
     }
@@ -59,10 +61,16 @@ const BookDetail = memo(() => {
     }  
     setLoadingBook(false)
   }
+  const add_to_recent = debounce(async (activity_type) => {
+    const response = await apiRequest('post' , 'create_activity/' , {book_id : book_id , activity_type : activity_type});
+    if (!response.success) { 
+      setInfo(response.error);
+    }
+  } ,1050)
   
   useEffect(() => {
     fetchBook(); 
-    checkOwnership(); 
+    checkOwnership();  
   }, [book_id]);  
 
   return (
@@ -128,21 +136,22 @@ const BookDetail = memo(() => {
                 </Text>
               </View>
             </View>
-            <View className=" mx-4 flex-row gap-2">
-              <TouchableOpacity activeOpacity={0.5}>
+            <View className=" mx-4 flex-row gap-2  items-center">
+              {book?.sample_audio && <TouchableOpacity onPress={() => add_to_recent('played')} activeOpacity={0.5}>
                 <FontAwesomeIcon
                   icon="fa-play-circle"
                   color="#FF9100"
                   size={30}
                 />
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.5}>
+              </TouchableOpacity>}
+              <TouchableOpacity onPress={() => add_to_recent('read')} activeOpacity={0.5}>
                 <FontAwesomeIcon
                   icon="fa-book-open"
                   color="#FF9100"
                   size={30}
                 />
               </TouchableOpacity>
+              {book?.duration && <Text className='ml-auto font-primaryLightItalic ' >{book.duration}</Text>}
             </View>
             <View className="mx-6">
               <Text className="font-primaryRegular py-4">Summary</Text>

@@ -40,7 +40,6 @@ const Library = () => {
   useEffect(() => {
     fetchLibrary();
   }, []);
-
   return (
     <>
       {loading ? (
@@ -76,12 +75,12 @@ const Library = () => {
                       <Text className="text-sm font-primaryRegular">
                         by{" "}
                         <Text className="text-gray-500">
-                          {item?.book?.author}
+                          {item?.book?.author.name}
                         </Text>
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity className="p-4 mt-auto">
-                      <FontAwesomeIcon icon="fa-book-open" size={24} />
+                      <FontAwesomeIcon icon="fa-download" size={24} />
                     </TouchableOpacity>
                   </View>
                 </View>

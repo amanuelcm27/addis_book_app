@@ -8,39 +8,13 @@ import {
 import React, { useState, useCallback, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LargeBookCard from "../../../components/LargeBookCard";
-import images from "../../../constants/images";
 import ContentHeader from "../../../components/ContentHeader";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view"; // Keep TabView for transitions
-import api from "../../../utils/api";
+import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { RefreshControl } from "react-native-gesture-handler";
 import { apiRequest } from "../../../utils/apiRequest";
 import Skeleton from "../../../components/SkeletonLoader";
 import InfoCard from "../../../components/InfoCard";
-
-const trendingBooks = [
-  { id: "1", imageSource: images.animal, title: "Animal Farm", type: "audio" },
-  { id: "2", imageSource: images.atlas, title: "Atlas" },
-  { id: "3", imageSource: images.got, title: "Game of Thrones", type: "audio" },
-  { id: "4", imageSource: images.htw, title: "How to Win Friends" },
-  {
-    id: "5",
-    imageSource: images.unscripted,
-    title: "Unscripted",
-    type: "audio",
-  },
-];
-
-const RecentPlayed = () => {
-  return (
-    <ScrollView>
-      <View className="flex-row flex-wrap justify-between mx-4 my-6">
-        {trendingBooks.map((book) => (
-          <LargeBookCard key={book.id} styles={"w-[48%] mb-4"} item={book} />
-        ))}
-      </View>
-    </ScrollView>
-  );
-};
+import RecentPlayed from "../../activity/RecentPlayed";
 
 const AllAudio = () => {
   const [books, setBooks] = useState([]);
@@ -60,7 +34,7 @@ const AllAudio = () => {
       setBooks(response.data);
       setLoading(false);
     } else {
-      setInfo(response.error);
+      setInfo(response.error); 
     }
   };
   useEffect(() => {
@@ -77,7 +51,7 @@ const AllAudio = () => {
         <View className="flex-row flex-wrap justify-between mx-4 my-6">
           {loading
             ? Array.from({ length: 4 }).map((_, index) => (
-                <Skeleton key={index} isLoading={true} customStyles={'w-[48%]'}>
+                <Skeleton key={index} isLoading={true} customStyles={"w-[48%]"}>
                   <View className="h-[300px] m-2 relative rounded-xl bg-white overflow-hidden"></View>
                 </Skeleton>
               ))

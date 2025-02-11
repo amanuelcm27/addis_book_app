@@ -16,38 +16,18 @@ import { RefreshControl } from "react-native-gesture-handler";
 import { apiRequest } from "../../../utils/apiRequest";
 import InfoCard from "../../../components/InfoCard";
 import Skeleton from "../../../components/SkeletonLoader";
-const trendingBooks = [
-  { id: "3", imageSource: images.got, title: "Game of Thrones", type: "audio" },
+import RecentOpened from "../../activity/RecentRead";
 
-  { id: "1", imageSource: images.animal, title: "Animal Farm", type: "audio" },
-  { id: "2", imageSource: images.atlas, title: "Atlas" },
-  {
-    id: "5",
-    imageSource: images.unscripted,
-    title: "Unscripted",
-    type: "audio",
-  },
-  { id: "4", imageSource: images.htw, title: "How to Win Friends" },
-];
 
-const RecentPlayed = () => {
-  return (
-    <ScrollView>
-      <View className="flex-row flex-wrap justify-between mx-4 my-6">
-        {trendingBooks.map((book) => (
-          <LargeBookCard key={book.id} styles={"w-[48%] mb-4"} item={book} />
-        ))}
-      </View>
-    </ScrollView>
-  );
-};
 
 const AllEbook = () => {
   const [books, setBooks] = useState([]);
   const [info, setInfo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
   const fetchBooks = async () => {
-    const response = await apiRequest("get", "/ebooks");
+    const response = await apiRequest("get", "/ebooks/");
     if (response.success) {
       setBooks(response.data);
       setLoading(false);
@@ -55,7 +35,6 @@ const AllEbook = () => {
       setInfo(response.error);
     }
   };
-  const [refreshing, setRefreshing] = useState(false);
 
   const handleRefresh = async () => {
     setLoading(true);
@@ -78,7 +57,7 @@ const AllEbook = () => {
         <View className="flex-row flex-wrap justify-between mx-4 my-6">
           {loading
             ? Array.from({ length: 4 }).map((_, index) => (
-                <Skeleton key={index} isLoading={true} customStyles={'w-[48%]'}>
+                <Skeleton key={index} isLoading={true} customStyles={"w-[48%]"}>
                   <View className="h-[300px] w-[170px] m-2 relative rounded-xl bg-white overflow-hidden"></View>
                 </Skeleton>
               ))
@@ -99,12 +78,12 @@ const ebook = () => {
   const [index, setIndex] = useState(0); // State to control active tab
   const [routes] = useState([
     { key: "all", title: "All" },
-    { key: "recent", title: "Recently Played" },
+    { key: "recent", title: "Recently Read" },
   ]);
 
   const renderScene = SceneMap({
     all: AllEbook,
-    recent: RecentPlayed,
+    recent: RecentOpened,
   });
   const renderTabBar = (props) => (
     <TabBar

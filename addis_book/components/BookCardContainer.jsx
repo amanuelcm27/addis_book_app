@@ -1,9 +1,9 @@
 import { View, Text, FlatList } from "react-native";
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import LargeBookCard from "./LargeBookCard";
 import Skeleton from "./SkeletonLoader";
 
-const BookCardContainer = ({ books, contains, loading }) => {
+const BookCardContainer = memo(({ books, contains, loading }) => {
   const [activeItem, setActiveItem] = useState(books[0]?.id);
 
   const viewableItemsChanged = ({ viewableItems }) => {
@@ -40,6 +40,6 @@ const BookCardContainer = ({ books, contains, loading }) => {
       />
     </View>
   );
-};
+});
 
 export default BookCardContainer;
