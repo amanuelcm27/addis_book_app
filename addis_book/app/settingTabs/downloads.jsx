@@ -8,7 +8,7 @@ import shadowStyles from "../../constants/shadowStyles";
 const downloads = () => {
   return (
     <ScrollView>
-      <View className="mx-4 my-4">
+      <View className="mx-4 my-2">
         <Text className="font-primaryBlack text-2xl">Downloads</Text>
 
         <View className="bg-white rounded-lg my-2">

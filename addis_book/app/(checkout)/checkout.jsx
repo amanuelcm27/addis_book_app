@@ -27,7 +27,6 @@ const Checkout = ({ showCheckoutBox, setShowCheckoutBox, book , checkOwnership }
       setInfo("Order successful");
       checkOwnership();
       setShowCheckoutBox(false);
-      console.log(response.data);
     }
     else {
       setInfo(response.error);

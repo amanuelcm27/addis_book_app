@@ -50,11 +50,14 @@ const BookDetail = memo(() => {
     }
   };
   const checkOwnership = async () => { 
+    if (!user ) return;
+    setLoadingBook(true);
     const response = await apiRequest('post' , '/check-ownership/' , {book_id : book_id});
     if(response.success){
       data = response.data;
       setOwnsBook(response.data.owns_book); 
     }  
+    setLoadingBook(false)
   }
   
   useEffect(() => {
@@ -202,10 +205,8 @@ const BookDetail = memo(() => {
             text={ownsBook ? `In Library` :`Buy ${book.price} ${book.currency}`}
             background={ownsBook ? 'bg-[#545353]':"bg-[#FF9100]"}
             textColor="text-white"
-            onClick={ownsBook ? () => router.push('/setting') : handleBuying}
-              
+            onClick={ownsBook ? () => router.push('/setting?initialTab=2') : handleBuying}
           />
-
           <Checkout
             checkOwnership={checkOwnership}
             book={book}
