@@ -14,7 +14,10 @@ import InfoCard from "../../components/InfoCard";
 import { router } from "expo-router";
 import { RefreshControl } from "react-native-gesture-handler";
 import shadowStyles from "../../constants/shadowStyles";
+import { downloadFile } from "../../utils/downloader";
+import * as FileSystem from "expo-file-system";
 
+const DOWNLOAD_DIR = FileSystem.documentDirectory + "downloads/";
 const Library = () => {
   const [library, setLibrary] = useState([]);
   const [info, setInfo] = useState(null);
@@ -37,6 +40,18 @@ const Library = () => {
     setLoading(false);
   };
 
+  const downloadContent = (content) => {
+    const { book } = content;
+    downloadFile(
+      book.id,
+      book.ebook,
+      book.cover,
+      book.title,
+      book.author.name
+    ).then((data) => {
+      console.log("File downloaded to (log from library.jsx):", data);
+    });
+  };
   useEffect(() => {
     fetchLibrary();
   }, []);
@@ -79,7 +94,10 @@ const Library = () => {
                         </Text>
                       </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity className="p-4 mt-auto">
+                    <TouchableOpacity
+                      onPress={() => downloadContent(item)}
+                      className="p-4 mt-auto"
+                    >
                       <FontAwesomeIcon icon="fa-download" size={24} />
                     </TouchableOpacity>
                   </View>
