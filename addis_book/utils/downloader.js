@@ -1,6 +1,8 @@
 import * as FileSystem from "expo-file-system";
+
 const DOWNLOAD_DIR = FileSystem.documentDirectory + "downloads/";
 const IMAGE_DIR = FileSystem.documentDirectory + "downloads/images/";
+
 const ensureDownloadDirsExist = async () => {
   const downloadDirInfo = await FileSystem.getInfoAsync(DOWNLOAD_DIR);
   const imageDirInfo = await FileSystem.getInfoAsync(IMAGE_DIR);
@@ -12,47 +14,52 @@ const ensureDownloadDirsExist = async () => {
   }
 };
 
+// Save metadata to a file
 const saveMetadata = async (metadata) => {
   try {
     const metadataFilePath = DOWNLOAD_DIR + "metadata.json";
     let metadataList = [];
     const fileInfo = await FileSystem.getInfoAsync(metadataFilePath);
     if (fileInfo.exists) {
-      const metadataString = await FileSystem.readAsStringAsync(
-        metadataFilePath
-      );
+      const metadataString = await FileSystem.readAsStringAsync(metadataFilePath);
       metadataList = JSON.parse(metadataString);
     }
     const existingEntry = metadataList.find((item) => item.id === metadata.id);
-    if (existingEntry) {// Prevents duplicate entry
+    if (existingEntry) {
       console.log(`Metadata with ID ${metadata.id} already exists. Skipping save.`);
-      return; 
+      return;
     }
-    // Add new metadata entry
     metadataList.push(metadata);
-    // Save updated metadata to the file
-    await FileSystem.writeAsStringAsync(
-      metadataFilePath,
-      JSON.stringify(metadataList)
-    );
+    await FileSystem.writeAsStringAsync(metadataFilePath, JSON.stringify(metadataList));
     console.log("Metadata saved successfully!");
   } catch (error) {
     console.error("Error saving metadata:", error);
   }
 };
 
-// Download file and cover, and save metadata
-export const downloadFile = async (id, fileUrl, coverUrl, title, author) => {
+// Download file and cover, and save metadata with progress tracking
+export const downloadFile = async (id, fileUrl, coverUrl, title, author, progressCallback) => {
   try {
     await ensureDownloadDirsExist();
+
     const fileName = fileUrl.split("/").pop();
     const fileLocalUri = DOWNLOAD_DIR + fileName;
+
+    // If the file does not exist, start downloading
     const fileInfo = await FileSystem.getInfoAsync(fileLocalUri);
     if (!fileInfo.exists) {
-      const { uri: fileUri } = await FileSystem.downloadAsync(
+      const downloadResumable = FileSystem.createDownloadResumable(
         fileUrl,
-        fileLocalUri
+        fileLocalUri,
+        {},
+        (downloadProgress) => {
+          const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
+          progressCallback(progress);
+        }
       );
+
+      const { uri: fileUri } = await downloadResumable.downloadAsync();
+      console.log("File downloaded to:", fileUri);
     }
 
     // Download cover image
@@ -60,20 +67,20 @@ export const downloadFile = async (id, fileUrl, coverUrl, title, author) => {
     const coverLocalUri = IMAGE_DIR + coverName;
     const coverInfo = await FileSystem.getInfoAsync(coverLocalUri);
     if (!coverInfo.exists) {
-      const { uri: coverUri } = await FileSystem.downloadAsync(
-        coverUrl,
-        coverLocalUri
-      );
+      const { uri: coverUri } = await FileSystem.downloadAsync(coverUrl, coverLocalUri);
     }
+
+    // Save metadata
     const metadata = {
       id,
       title,
-      cover: coverLocalUri, // Path to the cover image
+      cover: coverLocalUri,
       author,
-      fileUri: fileLocalUri, // Path to the downloaded file
+      fileUri: fileLocalUri,
     };
     await saveMetadata(metadata);
     return metadata;
+
   } catch (error) {
     console.error("Error downloading file and saving metadata:", error);
   }

@@ -8,21 +8,21 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { SafeAreaView } from "react-native-safe-area-context";
 import shadowStyles from "../../constants/shadowStyles";
 import * as FileSystem from "expo-file-system";
-import { RefreshControl } from "react-native-gesture-handler";
+import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import { router } from "expo-router";
+import EmptyCard from "../../components/EmptyCard";
 
 const DOWNLOAD_DIR = FileSystem.documentDirectory + "downloads/";
 const downloads = () => {
   const [downloadedBooks, setDownloadedBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setLoading(true);
     setRefreshing(true);
-    listDownloads();
+    await listDownloads();
     setRefreshing(false);
     setLoading(false);
   };
@@ -47,7 +47,6 @@ const downloads = () => {
   };
 
   const listDownloads = async () => {
-    setLoading(true);
     const jsonpath = DOWNLOAD_DIR + "metadata.json";
     if ((await FileSystem.getInfoAsync(jsonpath)).exists) {
       const books = await FileSystem.readAsStringAsync(jsonpath);
@@ -60,58 +59,74 @@ const downloads = () => {
     listDownloads();
   }, []);
   return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-      }
-    >
+    <>
       {loading ? (
-        <View>
+        <View  className="h-full items-center justify-center">
           <ActivityIndicator color={"#FF9100"} size={30} />
         </View>
       ) : (
         <View className="mx-4 my-2">
           <Text className="font-primaryBlack text-2xl">Downloads</Text>
-
-          {downloadedBooks.map((book) => (
-            <View key={book.id} className="bg-white rounded-lg my-2">
-              <View
-                className="flex-row items-center h-[80px] rounded-lg overflow-hidden"
-                style={shadowStyles.shadow}
-              >
-                <Image
-                  source={{ uri: book.cover }}
-                  className="w-[25%] h-full"
-                />
-                <TouchableOpacity
-                  onPress={() => router.push(`/book/${book?.id}`)}
-                  className="p-4 flex-1"
+          <FlatList
+            data={downloadedBooks}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View key={item.id} className="bg-white rounded-lg my-2">
+                <View
+                  className="flex-row items-center h-[80px] rounded-lg overflow-hidden"
+                  style={shadowStyles.shadow}
                 >
-                  <Text
-                    className="text-xl font-primaryBold"
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
+                  <Image
+                    source={{ uri: item?.cover }}
+                    className="w-[25%] h-full"
+                  />
+                  <TouchableOpacity
+                    onPress={() => router.push(`/book/${item?.id}`)}
+                    className="p-4 flex-1"
                   >
-                    {book.title}
-                  </Text>
-                  <Text className="text-sm font-primaryRegular">
-                    by <Text className="text-gray-500">{book.author}</Text>
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    deleteDownload(book.fileUri, book.cover, book.id)
-                  }
-                  className="p-4 mt-auto"
-                >
-                  <FontAwesomeIcon icon="fa-trash" size={16} />
-                </TouchableOpacity>
+                    <Text
+                      className="text-xl font-primaryBold"
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {item.title}
+                    </Text>
+                    <Text className="text-sm font-primaryRegular">
+                      by <Text className="text-gray-500">{item.author}</Text>
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      deleteDownload(item.fileUri, item.cover, item.id)
+                    }
+                    className="p-4 mt-auto"
+                  >
+                    <FontAwesomeIcon icon="fa-trash" size={16} />
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          ))}
+            )}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+                colors={["#FF9100"]}
+                tintColor={"#FF9100"}
+              />
+            }
+            contentContainerStyle={{ paddingBottom: 20 }}
+            ListEmptyComponent={ 
+              <EmptyCard
+                goto={'/setting?initialTab=2'}
+                text={"Your have no downloads"}
+                buttonText={"Download here"}
+              />
+            }
+          />
         </View>
       )}
-    </ScrollView>
+    </>
   );
 };
 

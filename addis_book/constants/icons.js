@@ -38,6 +38,7 @@ import {
   faArrowRightFromBracket,
   faDownload,
   faTrash,
+  faCircleCheck,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const setupIcons = () => {
@@ -79,6 +80,7 @@ export const setupIcons = () => {
     faVolumeXmark,
     faArrowRightFromBracket,
     faDownload,
-    faTrash
+    faTrash,
+    faCircleCheck,
   );
 };

@@ -6,7 +6,6 @@ import SideBar from "../(sidebar)/sidebar";
 const MemoizedSideBar = memo(SideBar);
 
 export default function DrawerLayout() {
-
   return (
     <Drawer
       screenOptions={{
@@ -14,7 +13,7 @@ export default function DrawerLayout() {
         drawerStyle: {
           width: 300,
         },
-        drawerType:'slide'
+        drawerType: "slide",
       }}
       drawerContent={(props) => <MemoizedSideBar {...props} />}
     >
