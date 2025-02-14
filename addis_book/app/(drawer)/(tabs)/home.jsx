@@ -11,16 +11,25 @@ import { RefreshControl } from "react-native-gesture-handler";
 import { apiRequest } from "../../../utils/apiRequest";
 import Skeleton from "../../../components/SkeletonLoader";
 import InfoCard from "../../../components/InfoCard";
-
+import { useAuth } from "../../../context/AuthContext";
 const Home = () => {
   const navigation = useNavigation();
   const [books, setBooks] = useState([]);
   const [info, setInfo] = useState(null);
+  const [recentActivity, setRecentActivity] = useState([]);
   const fetchBooks = async () => {
     const response = await apiRequest("get", "/books/");
     if (response.success) {
       setBooks(response.data.results);
       setLoading(false);
+    } else {
+      setInfo(response.error);
+    }
+  };
+  const fetchActivity = async () => {
+    const response = await apiRequest("get", "/all_activity/");
+    if (response.success) {
+      setRecentActivity(response.data);
     } else {
       setInfo(response.error);
     }
@@ -31,12 +40,15 @@ const Home = () => {
     setLoading(true);
     setRefreshing(true);
     await fetchBooks();
+    await fetchActivity();
     setRefreshing(false);
     setLoading(false);
   };
   useEffect(() => {
     fetchBooks();
+    fetchActivity();
   }, []);
+
   return (
     <>
       <InfoCard info={info} setInfo={setInfo} />
@@ -83,7 +95,7 @@ const Home = () => {
                     <View className="flex-row w-[48%] mb-4 h-[70px] rounded-md bg-white items-center"></View>
                   </Skeleton>
                 ))
-              : books
+              : recentActivity
                   .slice(0, 6)
                   .map((book) => (
                     <SmallBookCard

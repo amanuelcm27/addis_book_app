@@ -26,12 +26,10 @@ const saveMetadata = async (metadata) => {
     }
     const existingEntry = metadataList.find((item) => item.id === metadata.id);
     if (existingEntry) {
-      console.log(`Metadata with ID ${metadata.id} already exists. Skipping save.`);
       return;
     }
     metadataList.push(metadata);
     await FileSystem.writeAsStringAsync(metadataFilePath, JSON.stringify(metadataList));
-    console.log("Metadata saved successfully!");
   } catch (error) {
     console.error("Error saving metadata:", error);
   }
@@ -59,7 +57,6 @@ export const downloadFile = async (id, fileUrl, coverUrl, title, author, progres
       );
 
       const { uri: fileUri } = await downloadResumable.downloadAsync();
-      console.log("File downloaded to:", fileUri);
     }
 
     // Download cover image
