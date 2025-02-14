@@ -4,6 +4,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  FlatList,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useCallback, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,28 +20,49 @@ import InfoCard from "../../../components/InfoCard";
 import Skeleton from "../../../components/SkeletonLoader";
 import RecentOpened from "../../activity/RecentRead";
 
-
-
 const AllEbook = () => {
   const [books, setBooks] = useState([]);
   const [info, setInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const LIMIT = 10; // Number of books per request
 
-  const fetchBooks = async () => {
-    const response = await apiRequest("get", "/ebooks/");
+  const fetchBooks = async (newOffset = 0, append = false) => {
+    if (!hasMore) return;
+    if (newOffset > 0) setLoadingMore(true);
+    else setLoading(true);
+
+    const response = await apiRequest(
+      "get",
+      `/ebooks/?limit=${LIMIT}&offset=${newOffset}`
+    );
     if (response.success) {
-      setBooks(response.data);
-      setLoading(false);
+      setHasMore(response.data.next !== null);
+      setBooks((prevBooks) =>
+        append
+          ? [...prevBooks, ...response.data.results]
+          : response.data.results
+      );
+      setOffset(newOffset); 
     } else {
       setInfo(response.error);
     }
+    setLoading(false);
+    setLoadingMore(false);
   };
-
+  const handleLoadMore = () => {
+    if (!loadingMore) {
+      fetchBooks(offset + LIMIT, true);
+    }
+  };
   const handleRefresh = async () => {
+    setHasMore(true);
     setLoading(true);
     setRefreshing(true);
-    await fetchBooks();
+    await fetchBooks(0, false);
     setRefreshing(false);
     setLoading(false);
   };
@@ -49,27 +72,39 @@ const AllEbook = () => {
   return (
     <>
       <InfoCard setInfo={setInfo} info={info} />
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-      >
-        <View className="flex-row flex-wrap justify-between mx-4 my-6">
-          {loading
-            ? Array.from({ length: 4 }).map((_, index) => (
-                <Skeleton key={index} isLoading={true} customStyles={"w-[48%]"}>
-                  <View className="h-[300px] w-[170px] m-2 relative rounded-xl bg-white overflow-hidden"></View>
-                </Skeleton>
-              ))
-            : books.map((book) => (
-                <LargeBookCard
-                  key={book.id}
-                  styles={"w-[48%] mb-4"}
-                  item={book}
-                />
-              ))}
-        </View>
-      </ScrollView>
+      <View className="flex-row flex-wrap justify-between mx-4 my-6 ">
+        {loading ? (
+          Array.from({ length: 4 }).map((_, index) => (
+            <Skeleton key={index} isLoading={true} customStyles={"w-[48%]"}>
+              <View className="h-[300px] w-[170px] m-2 relative rounded-xl bg-white overflow-hidden"></View>
+            </Skeleton>
+          ))
+        ) : (
+          <FlatList
+            data={books}
+            numColumns={2}
+            keyExtractor={(item) => item.id}
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+            renderItem={({ item }) => (
+              <LargeBookCard key={item.id} styles="w-[48%] mb-4" item={item} />
+            )}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+              />
+            }
+            showsVerticalScrollIndicator={false}
+            onEndReached={handleLoadMore} // Load more when reaching bottom
+            onEndReachedThreshold={0.4} 
+            ListFooterComponent={
+              loadingMore ? (
+                <ActivityIndicator size="large" color="#FF9100" />
+              ) : null
+            }
+          />
+        )}
+      </View>
     </>
   );
 };

@@ -42,11 +42,10 @@ const BookDetail = memo(() => {
   const [book, setBook] = useState({});
   const [loadingBook, setLoadingBook] = useState(true);
   const fetchBook = async () => {
-    const response = await apiRequest("get", `/book/${book_id}`);
+    const response = await apiRequest("get", `/book/${book_id}/`);
     if (response.success) {
       setBook(response.data);
       setLoadingBook(false);
-      console.log("book data", response.data);  
     } else {
       setInfo(response.error);
     }

@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import { View, FlatList, Dimensions, ActivityIndicator } from "react-native";
 import React, { useState, useCallback, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LargeBookCard from "../../../components/LargeBookCard";
@@ -21,21 +15,46 @@ const AllAudio = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState(null);
+  const [offset, setOffset] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const LIMIT = 10; // Number of books per request
+
+  const fetchBooks = async (newOffset = 0, append = false) => {
+    if (!hasMore) return;
+    if (newOffset > 0) setLoadingMore(true);
+    else setLoading(true);
+
+    const response = await apiRequest(
+      "get",
+      `/audiobooks/?limit=${LIMIT}&offset=${newOffset}`
+    );
+    if (response.success) {
+      setHasMore(response.data.next !== null);
+      setBooks((prevBooks) =>
+        append
+          ? [...prevBooks, ...response.data.results]
+          : response.data.results
+      );
+      setOffset(newOffset); // Update offset
+    } else {
+      setInfo(response.error);
+    }
+    setLoading(false);
+    setLoadingMore(false);
+  };
+  const handleLoadMore = () => {
+    if (!loadingMore) {
+      fetchBooks(offset + LIMIT, true);
+    }
+  };
   const handleRefresh = async () => {
+    setHasMore(true);
     setLoading(true);
     setRefreshing(true);
-    await fetchBooks();
+    await fetchBooks(0, false);
     setRefreshing(false);
     setLoading(false);
-  };
-  const fetchBooks = async () => {
-    const response = await apiRequest("get", "/audiobooks");
-    if (response.success) {
-      setBooks(response.data);
-      setLoading(false);
-    } else {
-      setInfo(response.error); 
-    }
   };
   useEffect(() => {
     fetchBooks();
@@ -43,28 +62,44 @@ const AllAudio = () => {
   return (
     <>
       <InfoCard info={info} setInfo={setInfo} />
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-      >
-        <View className="flex-row flex-wrap justify-between mx-4 my-6">
-          {loading
-            ? Array.from({ length: 4 }).map((_, index) => (
-                <Skeleton key={index} isLoading={true} customStyles={"w-[48%]"}>
-                  <View className="h-[300px] m-2 relative rounded-xl bg-white overflow-hidden"></View>
-                </Skeleton>
-              ))
-            : books.map((book) => (
-                <LargeBookCard
-                  key={book.id}
-                  styles={"w-[48%] mb-4"}
-                  hasAudio={true}
-                  item={book}
-                />
-              ))}
-        </View>
-      </ScrollView>
+      <View className="flex-row flex-wrap justify-between mx-4 my-6 ">
+        {loading ? (
+          Array.from({ length: 4 }).map((_, index) => (
+            <Skeleton key={index} isLoading={true} customStyles={"w-[48%]"}>
+              <View className="h-[300px] w-[170px] m-2 relative rounded-xl bg-white overflow-hidden"></View>
+            </Skeleton>
+          ))
+        ) : (
+          <FlatList
+            data={books}
+            numColumns={2}
+            keyExtractor={(item) => item.id}
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+            renderItem={({ item }) => (
+              <LargeBookCard
+                key={item.id}
+                styles="w-[48%] mb-4"
+                hasAudio={true}
+                item={item}
+              />
+            )}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+              />
+            }
+            showsVerticalScrollIndicator={false}
+            onEndReached={handleLoadMore} // Load more when reaching bottom
+            onEndReachedThreshold={0.4} // Trigger when halfway to the bottom
+            ListFooterComponent={
+              loadingMore ? (
+                <ActivityIndicator size="large" color="#FF9100" />
+              ) : null
+            }
+          />
+        )}
+      </View>
     </>
   );
 };

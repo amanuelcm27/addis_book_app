@@ -17,7 +17,7 @@ import { RefreshControl } from "react-native-gesture-handler";
 import shadowStyles from "../../constants/shadowStyles";
 import { downloadFile } from "../../utils/downloader";
 import * as FileSystem from "expo-file-system";
-import * as Progress from "react-native-progress"; // Import circular progress
+import * as Progress from "react-native-progress";
 
 const DOWNLOAD_DIR = FileSystem.documentDirectory + "downloads/";
 

@@ -17,9 +17,9 @@ const Home = () => {
   const [books, setBooks] = useState([]);
   const [info, setInfo] = useState(null);
   const fetchBooks = async () => {
-    const response = await apiRequest("get", "/books");
+    const response = await apiRequest("get", "/books/");
     if (response.success) {
-      setBooks(response.data);
+      setBooks(response.data.results);
       setLoading(false);
     } else {
       setInfo(response.error);

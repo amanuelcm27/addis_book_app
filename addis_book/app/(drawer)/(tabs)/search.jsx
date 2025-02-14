@@ -1,22 +1,15 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  FlatList,
-} from "react-native";
+import { View, ActivityIndicator, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "../../../components/FormField";
 import LargeBookCard from "../../../components/LargeBookCard";
 import ContentHeader from "../../../components/ContentHeader";
 import { apiRequest } from "../../../utils/apiRequest";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { counter } from "@fortawesome/fontawesome-svg-core";
-import { set } from "react-native-reanimated";
 import InfoCard from "../../../components/InfoCard";
 import Skeleton from "../../../components/SkeletonLoader";
-import GenreItem from "../../../components/GenreItem";
+import GenreList from "../../../components/GenreList";
+
+const LIMIT = 10;
 
 const Search = () => {
   const [sampleBooks, setSampleBooks] = useState([]);
@@ -26,12 +19,15 @@ const Search = () => {
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState(null);
+  const [offset, setOffset] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
   const fetchSampleBooks = async () => {
     setLoading(true);
-    const response = await apiRequest("get", "/books");
+    const response = await apiRequest("get", "/books/");
     if (response.success) {
-      setSampleBooks(response.data);
-      setFilteredBooks(response.data);
+      setSampleBooks(response.data.results);
     } else {
       setInfo(response.error);
     }
@@ -39,30 +35,58 @@ const Search = () => {
   };
 
   const fetchGenres = async () => {
-    setLoading(true);
-    const response = await apiRequest("get", "/genres");
+    const response = await apiRequest("get", "/genres/");
     if (response.success) {
       setGenres(response.data);
     } else {
       setInfo(response.error);
     }
-    setLoading(false);
   };
 
-  const searchBook = async () => {
-    if (!searchText) return;
-    setLoading(true);
-    const response = await apiRequest("get", `/search?book=${searchText}`);
+  const searchBook = async (newOffset = 0, append = false) => {
+    if (!searchText.trim()) return; // Prevent empty searches
+    console.log("search term ", searchText);
+    if (newOffset === 0) {
+      setFilteredBooks([]); // Reset book list for new search
+      setHasMore(true); // Reset pagination
+    }
+    if (!hasMore) return;
+    console.log("has more to load", hasMore);
+
+    setLoading(newOffset === 0);
+    setLoadingMore(newOffset > 0);
+
+    const response = await apiRequest(
+      "get",
+      `/search/?book=${searchText}&limit=${LIMIT}&offset=${newOffset}`
+    );
+
     if (response.success) {
-      setFilteredBooks(response.data);
+      setHasMore(response.data.next !== null);
+      setFilteredBooks((prevBooks) =>
+        append
+          ? [...prevBooks, ...response.data.results]
+          : response.data.results
+      );
+      setOffset(newOffset);
     } else {
       setInfo(response.error);
     }
+
     setLoading(false);
+    setLoadingMore(false);
+  };
+
+  const handleLoadMore = () => {
+    if (!loadingMore && hasMore) {
+      searchBook(offset + LIMIT, true);
+    }
   };
 
   const clearSearch = () => {
     setSearchText("");
+    setFilteredBooks([]);
+    setHasMore(true);
     fetchSampleBooks();
   };
 
@@ -105,73 +129,66 @@ const Search = () => {
     <>
       <InfoCard info={info} setInfo={setInfo} />
       <SafeAreaView className="h-full bg-white">
-        <ScrollView>
-          <ContentHeader text={"Search for Books"} icon={"fa-search"} />
-          <View>
-            <FormField
-              value={searchText}
-              onChangeText={setSearchText}
-              onSubmitEditing={searchBook}
-              containerStyle="mx-4"
-              inputContainerStyle="rounded-[50px]"
-              inputStyle="text-black font-primaryRegular"
-              placeholder="Search by title"
-              returnKeyType="search"
-              type="search"
-              otherFunction={clearSearch}
-            />
-          </View>
-          <View className="mx-4  my-4">
-            <FlatList
-              data={genres}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => {
-                const isSelected = selectedGenres.includes(item.id);
-                return (
-                  <GenreItem
-                    item={item}
-                    isSelected={isSelected}
-                    toggleGenreSelection={toggleGenreSelection}
-                  />
-                );
-              }}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ gap: 4 }}
-            />
-            {selectedGenres.length > 0 && (
-              <View className="flex-row items-center">
-                <Text>{selectedGenres.length} filter applied</Text>
-                <TouchableOpacity
-                  className="ml-auto flex-row items-center rounded-full bg-[#f7f7f7] p-2 "
-                  onPress={() => setSelectedGenres([])}
-                >
-                  <Text className="font-primaryRegular">clear filters </Text>
-                  <FontAwesomeIcon icon="fa-close" />
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
+        <ContentHeader text="Search for Books" icon="fa-search" />
+
+        {/* Search Input */}
+        <View>
+          <FormField
+            value={searchText}
+            onChangeText={(text) => {
+              setSearchText(text);
+              setHasMore(true); // Reset hasMore for new searches
+            }}
+            onSubmitEditing={() => searchBook(0)}
+            containerStyle="mx-4"
+            inputContainerStyle="rounded-[50px]"
+            inputStyle="text-black font-primaryRegular"
+            placeholder="Search by title"
+            returnKeyType="search"
+            type="search"
+            otherFunction={clearSearch}
+          />
+        </View>
+
+        {/* Genre List */}
+        <GenreList
+          genres={genres}
+          selectedGenres={selectedGenres}
+          toggleGenreSelection={toggleGenreSelection}
+          setSelectedGenres={setSelectedGenres}
+        />
+
+        {/* Book List */}
+        {loading ? (
           <View className="flex-row flex-wrap justify-between mx-4 my-6">
-            {loading
-              ? Array.from({ length: 4 }).map((_, index) => (
-                  <Skeleton
-                    key={index}
-                    isLoading={true}
-                    customStyles={"w-[48%]"}
-                  >
-                    <View className="h-[300px] w-[170px] m-2 relative rounded-xl bg-white overflow-hidden"></View>
-                  </Skeleton>
-                ))
-              : filteredBooks.map((book) => (
-                  <LargeBookCard
-                    key={book.id}
-                    styles="w-[48%] mb-4"
-                    item={book}
-                  />
-                ))}
+            {Array.from({ length: 4 }).map((_, index) => (
+              <Skeleton key={index} isLoading={true} customStyles="w-[48%]">
+                <View className="h-[300px] w-[170px] m-2 relative rounded-xl bg-white overflow-hidden" />
+              </Skeleton>
+            ))}
           </View>
-        </ScrollView>
+        ) : (
+          <FlatList
+            data={filteredBooks.length > 0 ? filteredBooks : sampleBooks}
+            numColumns={2}
+            keyExtractor={(item) => item.id.toString()}
+            columnWrapperStyle={{
+              justifyContent: "space-between",
+              marginHorizontal: 16,
+            }}
+            renderItem={({ item }) => (
+              <LargeBookCard key={item.id} styles="w-[48%] mb-4" item={item} />
+            )}
+            showsVerticalScrollIndicator={false}
+            onEndReached={filteredBooks.length > 0 ? handleLoadMore : null}
+            onEndReachedThreshold={0.4}
+            ListFooterComponent={
+              loadingMore ? (
+                <ActivityIndicator size="large" color="#FF9100" />
+              ) : null
+            }
+          />
+        )}
       </SafeAreaView>
     </>
   );
