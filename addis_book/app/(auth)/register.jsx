@@ -87,20 +87,15 @@ const register = () => {
               <Text className="font-primarySemiBold text-xl py-4 text-center text-white">
                 Sign up with
               </Text>
-              <View className="bg-white shadow-lg shadow-black flex-row gap-8 justify-center rounded-full p-4">
-                <TouchableOpacity>
-                  <Image source={images.google} className="w-12 h-12 px-4" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Image source={images.telegram} className="w-12 h-12 px-4" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Image source={images.facebook} className="w-12 h-12 px-4" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Image source={images.whatsapp} className="w-12 h-12 px-4" />
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                className="bg-white shadow-lg shadow-black rounded-full flex-row p-4 items-center gap-2"
+              >
+                <Image source={images.google} className="w-12 h-12 px-4" />
+                <Text className="text-lg font-primaryBold">
+                  Sign with Google
+                </Text>
+              </TouchableOpacity>
               <View className="w-full ">
                 <FormField
                   onChangeText={(value) => handleChange("username", value)}

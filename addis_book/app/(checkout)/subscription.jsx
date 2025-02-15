@@ -22,7 +22,6 @@ const Subscription = () => {
   };
   const { loadUser } = useAuth();
   const { redirect } = useLocalSearchParams();
-  console.log(redirect)
   const fetchPlans = async () => {
     const response = await apiRequest("get", "/plans");
     if (response.success) {

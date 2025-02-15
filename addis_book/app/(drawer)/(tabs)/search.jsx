@@ -45,14 +45,11 @@ const Search = () => {
 
   const searchBook = async (newOffset = 0, append = false) => {
     if (!searchText.trim()) return; // Prevent empty searches
-    console.log("search term ", searchText);
     if (newOffset === 0) {
       setFilteredBooks([]); // Reset book list for new search
       setHasMore(true); // Reset pagination
     }
     if (!hasMore) return;
-    console.log("has more to load", hasMore);
-
     setLoading(newOffset === 0);
     setLoadingMore(newOffset > 0);
 

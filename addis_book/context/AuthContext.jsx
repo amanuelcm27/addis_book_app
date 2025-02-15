@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
 import * as SecureStore from "expo-secure-store";
 import api from "../utils/api";
 
@@ -7,6 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const loadUser = async () => {
     try {
       const token = await SecureStore.getItemAsync("access_token");
@@ -27,7 +28,7 @@ export const AuthProvider = ({ children }) => {
       await SecureStore.setItemAsync("access_token", data.access);
       await SecureStore.setItemAsync("refresh_token", data.refresh);
       await loadUser();
-      return { success: true }; 
+      return { success: true };
     } catch (error) {
       if (error.response) {
         switch (error.response.status) {
@@ -36,16 +37,10 @@ export const AuthProvider = ({ children }) => {
           case 400:
             return { success: false, error: "Bad request, please try again" };
           default:
-            return {
-              success: false,
-              error: "Network error or something went wrong",
-            };
+            return { success: false, error: "Network error or something went wrong" };
         }
       } else {
-        return {
-          success: false,
-          error: "Network error, please check your connection",
-        };
+        return { success: false, error: "Network error, please check your connection" };
       }
     }
   };
@@ -60,11 +55,9 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, loading, login, logout  , loadUser}}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const authValue = useMemo(() => ({ user, loading, login, logout, loadUser }), [user, loading]);
+
+  return <AuthContext.Provider value={authValue}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => useContext(AuthContext);

@@ -77,7 +77,6 @@ const Library = () => {
         setDownloadProgress((prev) => ({ ...prev, [book.id]: progress }));
       }
     ).then((data) => {
-      console.log("File downloaded to (log from library.jsx):", data);
       setDownloadProgress((prev) => ({ ...prev, [book.id]: null })); 
       setLibrary((prevLibrary) => 
         prevLibrary.map((item) =>
