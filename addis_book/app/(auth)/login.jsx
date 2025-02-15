@@ -7,15 +7,17 @@ import {
   ScrollView,
   Platform,
   TextInput,
+  BackHandler,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
 import FormField from "../../components/FormField";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import CustomButton from "../../components/CustomButton";
 import { useAuth } from "../../context/AuthContext";
 import InfoCard from "../../components/InfoCard";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 const login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +41,7 @@ const login = () => {
 
       if (!response.success) {
         setIsLoading(false);
-        setInfo(response.error); 
+        setInfo(response.error);
         return;
       }
 
@@ -47,7 +49,16 @@ const login = () => {
       router.replace(redirect ? decodeURIComponent(redirect) : "/home");
     }
   };
-
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        router.replace("/home"); 
+        return true;
+      };
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+      return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [])
+  );
   return (
     <>
       <InfoCard info={info} setInfo={setInfo} />
@@ -62,6 +73,12 @@ const login = () => {
               justifyContent: "center",
             }}
           >
+            <View >
+              <TouchableOpacity className="flex-row p-4 items-center bg-" onPress={() => router.push("/home")}>
+                <FontAwesomeIcon icon="fa-angle-left" color="white" />
+                <Text className="text-white">Back to home</Text>
+              </TouchableOpacity>
+            </View>
             <View className="flex-1 justify-center items-center ">
               <Text className="font-primarySemiBold text-xl py-4 text-center text-white">
                 Sign in with
