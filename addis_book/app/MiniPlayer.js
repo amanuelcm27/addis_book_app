@@ -1,28 +1,31 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, BackHandler } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { usePlayback } from "../context/PlayBackContext";
+import { useFocusEffect } from "expo-router";
+import { set } from "lodash";
 
 const MiniPlayer = () => {
-  const { currentTrack, togglePlayback, isPlaying } = usePlayback();
+  const { currentTrack, setIsVisible, togglePlayback, isPlaying } =
+    usePlayback();
 
   if (!currentTrack) return null;
 
   return (
-    <View className="p-2 bg-primary  flex-row  rounded-t-lg items-center">
+    <View className="p-2  flex-row  rounded-t-xl justify-center items-center">
       <Image
         source={{ uri: currentTrack.cover }}
         className="w-16 h-16 rounded-md"
       />
-      <View className='flex-1 justify-center mx-4'>
-        <Text className='text-white font-primaryBold'>Now playing</Text>
-        <Text className="text-white  flex-1">{currentTrack.title}</Text>
-      </View>
+      <TouchableOpacity onPress={() => setIsVisible(true)} className="flex-1 justify-center mx-4">
+        <Text className="font-primaryBold">Now playing</Text>
+        <Text className="font-primaryRegular">{currentTrack.title}</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={togglePlayback}>
         <FontAwesomeIcon
           icon={isPlaying ? "fa-circle-pause" : "fa-circle-play"}
-          color="white"
-          size={22}
+          color="black"
+          size={28}
         />
       </TouchableOpacity>
     </View>

@@ -32,7 +32,7 @@ const DetailScreenHeader = ({ book, scrollY }) => {
       >
         <ImageBackground
           source={{
-            uri: book.cover,
+            uri: book?.cover,
           }}
           blurRadius={2}
           className="w-full h-full"

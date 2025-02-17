@@ -6,10 +6,8 @@ import TabIcon from "../../../components/TabIcon";
 import MiniPlayer from "../../MiniPlayer";
 const TabLayout = () => {
   return (
-    <>
-    
+
       <Tabs tabBar={(props) => <TabBar {...props} />}>
-      
         <Tabs.Screen
           name="home"
           options={{
@@ -81,7 +79,7 @@ const TabLayout = () => {
           }}
         />
       </Tabs>
-    </>
+  
   );
 };
 export default TabLayout;

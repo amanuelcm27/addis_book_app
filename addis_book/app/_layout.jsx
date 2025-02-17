@@ -7,10 +7,12 @@ import { useCustomFonts } from "../constants/fonts";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import TrackPlayer from "react-native-track-player";
 import { PlaybackProvider } from "../context/PlayBackContext";
-import MiniPlayer from "./MiniPlayer";
+import Playback from "./(players)/playback";
+import { PlaybackService } from "../constants/service"; // Ensure correct path
 
 setupIcons();
 SplashScreen.preventAutoHideAsync();
+TrackPlayer.registerPlaybackService(() => PlaybackService);
 
 export default function App() {
   const [fontsLoaded, error] = useCustomFonts();
@@ -22,6 +24,7 @@ export default function App() {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, error]);
+
 
   if (!fontsLoaded) {
     return null;
@@ -38,6 +41,7 @@ export default function App() {
           <Stack.Screen name="(players)" options={{ headerShown: false }} />
           <Stack.Screen name="(checkout)" options={{ headerShown: false }} />
         </Stack>
+        <Playback />
       </PlaybackProvider>
     </AuthProvider>
   );

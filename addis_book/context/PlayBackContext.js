@@ -1,34 +1,59 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import TrackPlayer, { State, Capability, Event } from "react-native-track-player";
+import TrackPlayer, {
+  State,
+  Capability,
+  Event,
+  AppKilledPlaybackBehavior,
+  RepeatMode,
+} from "react-native-track-player";
 
-// Create the context
 const PlaybackContext = createContext();
-
 export const PlaybackProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
-  const [totalDuration, setTotalDuration] = useState(0);
-  const [isSliding, setIsSliding] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-
+  const [isVisible, setIsVisible] = useState(false);
+  const [isLooping, setIsLooping] = useState(false);
   useEffect(() => {
     async function setupPlayer() {
       await TrackPlayer.setupPlayer();
       TrackPlayer.updateOptions({
-        capabilities: [Capability.Play, Capability.Pause, Capability.Stop, Capability.SeekTo],
-        compactCapabilities: [Capability.Play, Capability.Pause, Capability.Stop],
+        android: {
+          appKilledPlaybackBehavior:
+            AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
+        },
+        capabilities: [
+          Capability.Play,
+          Capability.Pause,
+          Capability.JumpForward,
+          Capability.JumpBackward,
+          Capability.SeekTo,
+        ],
+        compactCapabilities: [
+          Capability.Play,
+          Capability.Pause,
+          Capability.JumpForward,
+          Capability.JumpBackward,
+          Capability.SeekTo,
+        ],
       });
-
-      // Track playback progress
-      const interval = setInterval(async () => {
-        if (!isSliding) {
-          const position = await TrackPlayer.getPosition();
-          setCurrentTime(position);
-        }
-      }, 1000);
-
-      return () => clearInterval(interval);
+      const playListener = TrackPlayer.addEventListener(Event.RemotePlay, () => togglePlayback());
+      const pauseListener = TrackPlayer.addEventListener(Event.RemotePause, () => togglePlayback());
+      const forwardListener = TrackPlayer.addEventListener(Event.RemoteJumpForward, () => skipForward());
+      const backwardListener = TrackPlayer.addEventListener(Event.RemoteJumpBackward, () => skipBackward());
+      const seekListener = TrackPlayer.addEventListener(Event.RemoteSeek, async (event) => {
+        const seekPosition = event.position; 
+        await TrackPlayer.seekTo(seekPosition);
+      });
+  
+      return () => {
+        playListener.remove();
+        pauseListener.remove();
+        forwardListener.remove();
+        backwardListener.remove();
+        seekListener.remove();
+      };
     }
 
     setupPlayer();
@@ -44,10 +69,9 @@ export const PlaybackProvider = ({ children }) => {
       artwork: track.cover,
     });
     setCurrentTrack(track);
-    const duration = await TrackPlayer.getDuration();
-    setTotalDuration(duration);
     await TrackPlayer.play();
     setIsPlaying(true);
+    setIsVisible(true);
   };
 
   const togglePlayback = async () => {
@@ -62,12 +86,12 @@ export const PlaybackProvider = ({ children }) => {
   };
 
   const skipBackward = async () => {
-    const position = await TrackPlayer.getPosition();
+    const position = await TrackPlayer.getProgress().then((progress) => progress.position);
     await TrackPlayer.seekTo(position - 5);
   };
 
   const skipForward = async () => {
-    const position = await TrackPlayer.getPosition();
+    const position = await TrackPlayer.getProgress().then((progress) => progress.position);
     await TrackPlayer.seekTo(position + 5);
   };
 
@@ -77,21 +101,31 @@ export const PlaybackProvider = ({ children }) => {
     setIsMuted(currentVolume !== 0);
   };
 
+  const toggleLoop = async () => {
+    const currentLoop = !isLooping;
+    setIsLooping(currentLoop);
+    await TrackPlayer.setRepeatMode(
+      currentLoop ? RepeatMode.Track : RepeatMode.Off
+    );
+  };
+
   return (
     <PlaybackContext.Provider
       value={{
         isPlaying,
         currentTrack,
         currentTime,
-        totalDuration,
         isMuted,
+        isVisible,
+        isLooping,
+        setIsVisible,
         togglePlayback,
         skipForward,
         skipBackward,
         toggleMute,
         loadTrack,
+        toggleLoop,
         setCurrentTime,
-        setIsSliding,
       }}
     >
       {children}

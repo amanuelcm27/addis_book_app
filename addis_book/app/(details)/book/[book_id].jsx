@@ -19,6 +19,7 @@ import DetailScreenHeader from "../../../components/DetailScreenHeader";
 import { apiRequest } from "../../../utils/apiRequest";
 import InfoCard from "../../../components/InfoCard";
 import { debounce } from "lodash";
+import { usePlayback } from "../../../context/PlayBackContext";
 const BookDetail = memo(() => {
   const [showCheckoutBox, setShowCheckoutBox] = useState(false);
   const { user, loading } = useAuth();
@@ -26,6 +27,7 @@ const BookDetail = memo(() => {
   const { book_id } = useLocalSearchParams();
   const [info, setInfo] = useState(null);
   const [ownsBook, setOwnsBook] = useState(false);
+  const { loadTrack, currentTrack, setIsVisible } = usePlayback();
   const handleBuying = () => {
     if (!loading && !user) {
       router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
@@ -71,7 +73,19 @@ const BookDetail = memo(() => {
       setInfo(response.error);
     }
   }, 1050);
-
+  const playAudio = (book) => {
+    if (currentTrack && currentTrack.id === book_id) {
+      setIsVisible(true);
+    } else {
+      loadTrack({
+        id: book.id,
+        audioUri: book.audio_book,
+        title: book.title,
+        cover: book.cover,
+        author: book.author.name,
+      });
+    }
+  };
   useEffect(() => {
     fetchBook();
     checkOwnership();
@@ -143,10 +157,8 @@ const BookDetail = memo(() => {
               {book?.sample_audio && (
                 <TouchableOpacity
                   onPress={() => {
-                    router.push(
-                      `/playback?audioUri=${book.audio_book}&title=${book.title}&cover=${book.cover}&author=${book.author.name}`
-                    ),
-                      add_to_recent("played");
+                    playAudio(book);
+                    add_to_recent("played");
                   }}
                   activeOpacity={0.5}
                 >
@@ -247,6 +259,7 @@ const BookDetail = memo(() => {
                 : handleBuying
             }
           />
+
           <Checkout
             checkOwnership={checkOwnership}
             book={book}

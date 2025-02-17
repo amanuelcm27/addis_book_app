@@ -12,6 +12,7 @@ import { apiRequest } from "../../../utils/apiRequest";
 import Skeleton from "../../../components/SkeletonLoader";
 import InfoCard from "../../../components/InfoCard";
 import { useAuth } from "../../../context/AuthContext";
+import { set } from "lodash";
 const Home = () => {
   const navigation = useNavigation();
   const [books, setBooks] = useState([]);
@@ -21,7 +22,6 @@ const Home = () => {
     const response = await apiRequest("get", "/books/");
     if (response.success) {
       setBooks(response.data.results);
-      setLoading(false);
     } else {
       setInfo(response.error);
     }
@@ -44,9 +44,14 @@ const Home = () => {
     setRefreshing(false);
     setLoading(false);
   };
+  const loadFrontPage = async () => { 
+    setLoading(true);
+    await fetchBooks();
+    await fetchActivity();
+    setLoading(false);
+  }
   useEffect(() => {
-    fetchBooks();
-    fetchActivity();
+    loadFrontPage();
   }, []);
 
   return (
@@ -95,14 +100,14 @@ const Home = () => {
                     <View className="flex-row w-[48%] mb-4 h-[70px] rounded-md bg-white items-center"></View>
                   </Skeleton>
                 ))
-              : recentActivity
-                  .map((book) => (
-                    <SmallBookCard
-                      imageSource={book.cover}
-                      title={book.title}
-                      id={book.id}
-                    />
-                  ))}
+              : recentActivity.map(({ book = activity, id }) => (
+                  <SmallBookCard
+                    key={id ? `${book.id}-${id}` : book.id}
+                    imageSource={book.cover}
+                    title={book.title}
+                    id={book.id}
+                  />
+                ))}
           </View>
 
           <BookCardContainer
