@@ -39,8 +39,8 @@ const Home = () => {
   const handleRefresh = async () => {
     setLoading(true);
     setRefreshing(true);
-    await fetchBooks();
     await fetchActivity();
+    await fetchBooks();
     setRefreshing(false);
     setLoading(false);
   };
@@ -96,10 +96,8 @@ const Home = () => {
                   </Skeleton>
                 ))
               : recentActivity
-                  .slice(0, 6)
                   .map((book) => (
                     <SmallBookCard
-                      key={book.id}
                       imageSource={book.cover}
                       title={book.title}
                       id={book.id}

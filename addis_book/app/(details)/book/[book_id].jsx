@@ -33,10 +33,10 @@ const BookDetail = memo(() => {
       setShowCheckoutBox(true);
     }
   };
-  const [scrollY] = useState(new Animated.Value(0)); 
+  const [scrollY] = useState(new Animated.Value(0));
   const opacityInterpolate = scrollY.interpolate({
-    inputRange: [0, 100], 
-    outputRange: [0, 1], 
+    inputRange: [0, 100],
+    outputRange: [0, 1],
     extrapolate: "clamp",
   });
   const [book, setBook] = useState({});
@@ -50,28 +50,32 @@ const BookDetail = memo(() => {
       setInfo(response.error);
     }
   };
-  const checkOwnership = async () => { 
-    if (!user ) return;
+  const checkOwnership = async () => {
+    if (!user) return;
     setLoadingBook(true);
-    const response = await apiRequest('post' , '/check-ownership/' , {book_id : book_id});
-    if(response.success){
+    const response = await apiRequest("post", "/check-ownership/", {
+      book_id: book_id,
+    });
+    if (response.success) {
       data = response.data;
-      setOwnsBook(response.data.owns_book); 
-    }  
-    setLoadingBook(false)
-  }
+      setOwnsBook(response.data.owns_book);
+    }
+    setLoadingBook(false);
+  };
   const add_to_recent = debounce(async (activity_type) => {
-    const response = await apiRequest('post' , 'create_activity/' , {book_id : book_id , activity_type : activity_type});
-    if (!response.success) { 
+    const response = await apiRequest("post", "create_activity/", {
+      book_id: book_id,
+      activity_type: activity_type,
+    });
+    if (!response.success) {
       setInfo(response.error);
     }
-  } ,1050)
-  
-  useEffect(() => {
-    fetchBook(); 
-    checkOwnership();  
-  }, [book_id]);  
+  }, 1050);
 
+  useEffect(() => {
+    fetchBook();
+    checkOwnership();
+  }, [book_id]);
   return (
     <>
       <InfoCard info={info} setInfo={setInfo} />
@@ -91,28 +95,28 @@ const BookDetail = memo(() => {
                 opacity: opacityInterpolate,
               }}
             >
-                <ImageBackground
-                  source={{ uri: book.cover }}
-                  blurRadius={10}
-                  className="flex-row h-full  items-center  gap-2 p-4"
-                >
-                  <TouchableOpacity onPress={() => router.back()}>
-                    <FontAwesomeIcon
-                      icon="fa-angle-left"
-                      color="white"
-                      size={30}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={0.6} className="flex-1">
-                    <Text
-                      className="text-white text-lg font-primaryBold"
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
-                    >
-                      {book.title}
-                    </Text>
-                  </TouchableOpacity>
-                </ImageBackground>
+              <ImageBackground
+                source={{ uri: book?.cover }}
+                blurRadius={10}
+                className="flex-row h-full  items-center  gap-2 p-4"
+              >
+                <TouchableOpacity onPress={() => router.back()}>
+                  <FontAwesomeIcon
+                    icon="fa-angle-left"
+                    color="white"
+                    size={30}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.6} className="flex-1">
+                  <Text
+                    className="text-white text-lg font-primaryBold"
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {book.title}
+                  </Text>
+                </TouchableOpacity>
+              </ImageBackground>
             </Animated.View>
           </View>
 
@@ -136,21 +140,43 @@ const BookDetail = memo(() => {
               </View>
             </View>
             <View className=" mx-4 flex-row gap-2  items-center">
-              {book?.sample_audio && <TouchableOpacity onPress={() => add_to_recent('played')} activeOpacity={0.5}>
-                <FontAwesomeIcon
-                  icon="fa-play-circle"
-                  color="#FF9100"
-                  size={30}
-                />
-              </TouchableOpacity>}
-              <TouchableOpacity onPress={() => add_to_recent('read')} activeOpacity={0.5}>
+              {book?.sample_audio && (
+                <TouchableOpacity
+                  onPress={() => {
+                    router.push(
+                      `/playback?audioUri=${book.audio_book}&title=${book.title}&cover=${book.cover}&author=${book.author.name}`
+                    ),
+                      add_to_recent("played");
+                  }}
+                  activeOpacity={0.5}
+                >
+                  <FontAwesomeIcon
+                    icon="fa-play-circle"
+                    color="#FF9100"
+                    size={30}
+                  />
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity
+                onPress={() => {
+                  router.push(
+                    `/reader?fileUri=${book?.ebook}&book_id=${book.id}&title=${book.title}`
+                  ),
+                    add_to_recent("read");
+                }}
+                activeOpacity={0.5}
+              >
                 <FontAwesomeIcon
                   icon="fa-book-open"
                   color="#FF9100"
                   size={30}
                 />
               </TouchableOpacity>
-              {book?.duration && <Text className='ml-auto font-primaryLightItalic ' >{book.duration}</Text>}
+              {book?.duration && (
+                <Text className="ml-auto font-primaryLightItalic ">
+                  {book.duration}
+                </Text>
+              )}
             </View>
             <View className="mx-6">
               <Text className="font-primaryRegular py-4">Summary</Text>
@@ -210,10 +236,16 @@ const BookDetail = memo(() => {
           </ScrollView>
 
           <CustomButton
-            text={ownsBook ? `In Library` :`Buy ${book.price} ${book.currency}`}
-            background={ownsBook ? 'bg-[#545353]':"bg-[#FF9100]"}
+            text={
+              ownsBook ? `In Library` : `Buy ${book.price} ${book.currency}`
+            }
+            background={ownsBook ? "bg-[#545353]" : "bg-[#FF9100]"}
             textColor="text-white"
-            onClick={ownsBook ? () => router.push('/setting?initialTab=2') : handleBuying}
+            onClick={
+              ownsBook
+                ? () => router.push("/setting?initialTab=2")
+                : handleBuying
+            }
           />
           <Checkout
             checkOwnership={checkOwnership}
