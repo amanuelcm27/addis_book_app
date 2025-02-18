@@ -84,6 +84,7 @@ const BookDetail = memo(() => {
         cover: book.cover,
         author: book.author.name,
       });
+      setIsVisible(true);
     }
   };
   useEffect(() => {
@@ -184,11 +185,7 @@ const BookDetail = memo(() => {
                   size={30}
                 />
               </TouchableOpacity>
-              {book?.duration && (
-                <Text className="ml-auto font-primaryLightItalic ">
-                  {book.duration}
-                </Text>
-              )}
+
             </View>
             <View className="mx-6">
               <Text className="font-primaryRegular py-4">Summary</Text>

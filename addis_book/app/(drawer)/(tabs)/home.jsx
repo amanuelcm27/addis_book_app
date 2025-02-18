@@ -11,8 +11,7 @@ import { RefreshControl } from "react-native-gesture-handler";
 import { apiRequest } from "../../../utils/apiRequest";
 import Skeleton from "../../../components/SkeletonLoader";
 import InfoCard from "../../../components/InfoCard";
-import { useAuth } from "../../../context/AuthContext";
-import { set } from "lodash";
+
 const Home = () => {
   const navigation = useNavigation();
   const [books, setBooks] = useState([]);
@@ -26,6 +25,7 @@ const Home = () => {
       setInfo(response.error);
     }
   };
+  
   const fetchActivity = async () => {
     const response = await apiRequest("get", "/all_activity/");
     if (response.success) {
@@ -44,12 +44,12 @@ const Home = () => {
     setRefreshing(false);
     setLoading(false);
   };
-  const loadFrontPage = async () => { 
+  const loadFrontPage = async () => {
     setLoading(true);
     await fetchBooks();
     await fetchActivity();
     setLoading(false);
-  }
+  };
   useEffect(() => {
     loadFrontPage();
   }, []);
@@ -122,7 +122,7 @@ const Home = () => {
           />
           <BookCardContainer
             loading={loading}
-            books={[...books].sort(() => Math.random() - 0.5)}
+            books={books}
             contains="Recommended"
           />
         </ScrollView>

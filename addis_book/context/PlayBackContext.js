@@ -5,8 +5,10 @@ import TrackPlayer, {
   Event,
   AppKilledPlaybackBehavior,
   RepeatMode,
+  useProgress,
 } from "react-native-track-player";
-
+import * as Linking from "expo-linking";
+import { router } from "expo-router";
 const PlaybackContext = createContext();
 export const PlaybackProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -15,6 +17,7 @@ export const PlaybackProvider = ({ children }) => {
   const [isMuted, setIsMuted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isLooping, setIsLooping] = useState(false);
+  const [isSliding, setIsSliding] = useState(false);
   useEffect(() => {
     async function setupPlayer() {
       await TrackPlayer.setupPlayer();
@@ -38,15 +41,29 @@ export const PlaybackProvider = ({ children }) => {
           Capability.SeekTo,
         ],
       });
-      const playListener = TrackPlayer.addEventListener(Event.RemotePlay, () => togglePlayback());
-      const pauseListener = TrackPlayer.addEventListener(Event.RemotePause, () => togglePlayback());
-      const forwardListener = TrackPlayer.addEventListener(Event.RemoteJumpForward, () => skipForward());
-      const backwardListener = TrackPlayer.addEventListener(Event.RemoteJumpBackward, () => skipBackward());
-      const seekListener = TrackPlayer.addEventListener(Event.RemoteSeek, async (event) => {
-        const seekPosition = event.position; 
-        await TrackPlayer.seekTo(seekPosition);
-      });
-  
+      const playListener = TrackPlayer.addEventListener(Event.RemotePlay, () =>
+        togglePlayback()
+      );
+      const pauseListener = TrackPlayer.addEventListener(
+        Event.RemotePause,
+        () => togglePlayback()
+      );
+      const forwardListener = TrackPlayer.addEventListener(
+        Event.RemoteJumpForward,
+        () => skipForward()
+      );
+      const backwardListener = TrackPlayer.addEventListener(
+        Event.RemoteJumpBackward,
+        () => skipBackward()
+      );
+      const seekListener = TrackPlayer.addEventListener(
+        Event.RemoteSeek,
+        async (event) => {
+          const seekPosition = event.position;
+          await TrackPlayer.seekTo(seekPosition);
+        }
+      );
+
       return () => {
         playListener.remove();
         pauseListener.remove();
@@ -71,27 +88,30 @@ export const PlaybackProvider = ({ children }) => {
     setCurrentTrack(track);
     await TrackPlayer.play();
     setIsPlaying(true);
-    setIsVisible(true);
   };
 
   const togglePlayback = async () => {
     const state = await TrackPlayer.getState();
     if (state === State.Playing) {
-      await TrackPlayer.pause();
       setIsPlaying(false);
+      await TrackPlayer.pause();
     } else {
-      await TrackPlayer.play();
       setIsPlaying(true);
+      await TrackPlayer.play();
     }
   };
 
   const skipBackward = async () => {
-    const position = await TrackPlayer.getProgress().then((progress) => progress.position);
+    const position = await TrackPlayer.getProgress().then(
+      (progress) => progress.position
+    );
     await TrackPlayer.seekTo(position - 5);
   };
 
   const skipForward = async () => {
-    const position = await TrackPlayer.getProgress().then((progress) => progress.position);
+    const position = await TrackPlayer.getProgress().then(
+      (progress) => progress.position
+    );
     await TrackPlayer.seekTo(position + 5);
   };
 
@@ -118,6 +138,7 @@ export const PlaybackProvider = ({ children }) => {
         isMuted,
         isVisible,
         isLooping,
+        isSliding,
         setIsVisible,
         togglePlayback,
         skipForward,
@@ -126,6 +147,7 @@ export const PlaybackProvider = ({ children }) => {
         loadTrack,
         toggleLoop,
         setCurrentTime,
+        setIsSliding,
       }}
     >
       {children}

@@ -4,7 +4,7 @@ import "../global.css";
 import { setupIcons } from "../constants/icons";
 import { SplashScreen, Stack } from "expo-router";
 import { useCustomFonts } from "../constants/fonts";
-import { AuthProvider, useAuth } from "../context/AuthContext";
+import { AuthProvider } from "../context/AuthContext";
 import TrackPlayer from "react-native-track-player";
 import { PlaybackProvider } from "../context/PlayBackContext";
 import Playback from "./(players)/playback";
@@ -25,7 +25,6 @@ export default function App() {
     }
   }, [fontsLoaded, error]);
 
-
   if (!fontsLoaded) {
     return null;
   }
@@ -40,6 +39,7 @@ export default function App() {
           <Stack.Screen name="(details)" options={{ headerShown: false }} />
           <Stack.Screen name="(players)" options={{ headerShown: false }} />
           <Stack.Screen name="(checkout)" options={{ headerShown: false }} />
+          <Stack.Screen name="notification.click" options={{ headerShown:false }} />
         </Stack>
         <Playback />
       </PlaybackProvider>

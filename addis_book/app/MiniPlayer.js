@@ -2,8 +2,6 @@ import React from "react";
 import { View, Text, TouchableOpacity, Image, BackHandler } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { usePlayback } from "../context/PlayBackContext";
-import { useFocusEffect } from "expo-router";
-import { set } from "lodash";
 
 const MiniPlayer = () => {
   const { currentTrack, setIsVisible, togglePlayback, isPlaying } =
@@ -19,7 +17,7 @@ const MiniPlayer = () => {
       />
       <TouchableOpacity onPress={() => setIsVisible(true)} className="flex-1 justify-center mx-4">
         <Text className="font-primaryBold">Now playing</Text>
-        <Text className="font-primaryRegular">{currentTrack.title}</Text>
+        <Text className="font-primaryRegular" numberOfLines={1}>{currentTrack.title}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={togglePlayback}>
         <FontAwesomeIcon

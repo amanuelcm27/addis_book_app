@@ -28,6 +28,7 @@ const LargeBookCard = ({
   styles,
   hasAudio,
   animate = false,
+  playAudio,
 }) => {
   const CardContent = (
     <TouchableOpacity
@@ -42,6 +43,7 @@ const LargeBookCard = ({
       {hasAudio && (
         <TouchableOpacity
           activeOpacity={0.8}
+          onPress={() => playAudio(item)}
           className="absolute right-0 bottom-0 m-4 bg-white rounded-full"
         >
           <FontAwesomeIcon icon={"fa-play-circle"} size={50} color="#FF9100" />

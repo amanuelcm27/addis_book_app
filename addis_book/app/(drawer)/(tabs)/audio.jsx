@@ -9,6 +9,7 @@ import { apiRequest } from "../../../utils/apiRequest";
 import Skeleton from "../../../components/SkeletonLoader";
 import InfoCard from "../../../components/InfoCard";
 import RecentPlayed from "../../activity/RecentPlayed";
+import { usePlayback } from "../../../context/PlayBackContext";
 
 const AllAudio = () => {
   const [books, setBooks] = useState([]);
@@ -19,12 +20,11 @@ const AllAudio = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const LIMIT = 10; // Number of books per request
-
+  const { setIsVisible , currentTrack , loadTrack} = usePlayback();
   const fetchBooks = async (newOffset = 0, append = false) => {
     if (!hasMore) return;
     if (newOffset > 0) setLoadingMore(true);
     else setLoading(true);
-
     const response = await apiRequest(
       "get",
       `/audiobooks/?limit=${LIMIT}&offset=${newOffset}`
@@ -37,14 +37,15 @@ const AllAudio = () => {
           : response.data.results
       );
       setOffset(newOffset); // Update offset
+      setLoading(false);
+      setLoadingMore(false);
     } else {
       setInfo(response.error);
     }
-    setLoading(false);
-    setLoadingMore(false);
+
   };
   const handleLoadMore = () => {
-    if (!loadingMore) {
+    if (!loadingMore && !refreshing && hasMore) {
       fetchBooks(offset + LIMIT, true);
     }
   };
@@ -55,6 +56,19 @@ const AllAudio = () => {
     await fetchBooks(0, false);
     setRefreshing(false);
     setLoading(false);
+  };
+  const playAudio = (book) => {
+    if (currentTrack && currentTrack.id === book.id) {
+      setIsVisible(true);
+    } else {
+      loadTrack({
+        id: book.id,
+        audioUri: book.audio_book,
+        title: book.title,
+        cover: book.cover,
+        author: book.author.name,
+      });
+    }
   };
   useEffect(() => {
     fetchBooks();
@@ -81,6 +95,7 @@ const AllAudio = () => {
                 styles="w-[48%] mb-4"
                 hasAudio={true}
                 item={item}
+                playAudio={playAudio}
               />
             )}
             refreshControl={

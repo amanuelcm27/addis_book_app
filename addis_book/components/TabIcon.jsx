@@ -6,7 +6,6 @@ import * as Animatable from 'react-native-animatable';
 const TabIcon = ({ icon, name, focused }) => {
   return (
     <Animatable.View
-      animation={focused ? "jello" : ""}  
       duration={500}
       className="flex-row items-center px-2 py-2"
       style={{

@@ -29,22 +29,13 @@ const Playback = () => {
     setCurrentTime,
     isVisible,
     isLooping,
+    isSliding, 
+    setIsSliding,
     toggleLoop,
   } = usePlayback();
-
   const { title, cover } = currentTrack || {};
-  const [isSliding, setIsSliding] = useState(false);
-  const progress = useProgress();
-
-  useEffect(() => {
-    if (!isSliding) {
-      setCurrentTime(progress.position);
-    }
-  }, [progress.position, isSliding]);
-
+  const progress = useProgress()
   if (!currentTrack) return null;
-
-
   return (
     <Modal
       animationType="slide"
@@ -83,24 +74,24 @@ const Playback = () => {
                 style={{ width: "100%", height: 20 }}
                 minimumValue={0}
                 maximumValue={progress.duration}
-                value={isSliding ? currentTime : progress.position}
+                value={progress.position}
                 onValueChange={(value) => {
                   setIsSliding(true);
                   setCurrentTime(value);
                 }}
                 onSlidingStart={() => setIsSliding(true)}
                 onSlidingComplete={async (value) => {
-                  await TrackPlayer.seekTo(value);
                   setIsSliding(false);
+                  await TrackPlayer.seekTo(value);
                 }}
-                step={1}
+                step={0.5}
                 minimumTrackTintColor="#FF9100"
                 maximumTrackTintColor="#FFFFFF"
                 thumbTintColor="white"
               />
 
               <View className="flex-row justify-between mx-4">
-                <Text className="text-white">{formatTime(currentTime)}</Text>
+                <Text className="text-white">{formatTime(isSliding  ? currentTime : progress.position)}</Text>
                 <Text className="text-white">
                   {formatTime(progress.duration)}
                 </Text>
