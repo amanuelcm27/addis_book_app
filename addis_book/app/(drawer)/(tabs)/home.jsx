@@ -25,7 +25,7 @@ const Home = () => {
       setInfo(response.error);
     }
   };
-  
+
   const fetchActivity = async () => {
     const response = await apiRequest("get", "/all_activity/");
     if (response.success) {
@@ -53,7 +53,6 @@ const Home = () => {
   useEffect(() => {
     loadFrontPage();
   }, []);
-
   return (
     <>
       <InfoCard info={info} setInfo={setInfo} />
@@ -100,14 +99,18 @@ const Home = () => {
                     <View className="flex-row w-[48%] mb-4 h-[70px] rounded-md bg-white items-center"></View>
                   </Skeleton>
                 ))
-              : recentActivity.map(({ book = activity, id }) => (
-                  <SmallBookCard
-                    key={id ? `${book.id}-${id}` : book.id}
-                    imageSource={book.cover}
-                    title={book.title}
-                    id={book.id}
-                  />
-                ))}
+              : recentActivity.map((item, index) => {
+                  const book = item.book ? item.book : item;
+                  const key = item.book? `${book.id}-${item.id || index}`: book.id;
+                  return (
+                    <SmallBookCard
+                      key={key}
+                      imageSource={book.cover}
+                      title={book.title}
+                      id={book.id}
+                    />
+                  );
+                })}
           </View>
 
           <BookCardContainer

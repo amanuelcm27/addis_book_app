@@ -1,13 +1,21 @@
-import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+} from "react";
 import * as SecureStore from "expo-secure-store";
 import api from "../utils/api";
+import NetInfo, { useNetInfo } from "@react-native-community/netinfo";
 
-const AuthContext = createContext();
+const AuthContext = createContext(); 
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [isOffline, setIsOffline] = useState(false);
+  const network = useNetInfo();
   const loadUser = async () => {
     try {
       const token = await SecureStore.getItemAsync("access_token");
@@ -37,10 +45,16 @@ export const AuthProvider = ({ children }) => {
           case 400:
             return { success: false, error: "Bad request, please try again" };
           default:
-            return { success: false, error: "Network error or something went wrong" };
+            return {
+              success: false,
+              error: "Network error or something went wrong",
+            };
         }
       } else {
-        return { success: false, error: "Network error, please check your connection" };
+        return {
+          success: false,
+          error: "Network error, please check your connection",
+        };
       }
     }
   };
@@ -50,14 +64,28 @@ export const AuthProvider = ({ children }) => {
     await SecureStore.deleteItemAsync("refresh_token");
     setUser(null);
   };
-
   useEffect(() => {
     loadUser();
   }, []);
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state,) =>{
+      setIsOffline(!state.isConnected);
+      console.log("Connection type", state.type);
+      console.log("Is connected?", state.isConnected);
+    }) 
+    return () => unsubscribe();
+  }, []);
+  
 
-  const authValue = useMemo(() => ({ user, loading, login, logout, loadUser }), [user, loading]);
 
-  return <AuthContext.Provider value={authValue}>{children}</AuthContext.Provider>;
+  const authValue = useMemo(
+    () => ({ user, loading, isOffline, login, logout, loadUser }),
+    [user, loading]
+  );
+  
+  return (
+    <AuthContext.Provider value={authValue}>{children}</AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => useContext(AuthContext);

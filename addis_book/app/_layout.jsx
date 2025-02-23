@@ -9,6 +9,7 @@ import TrackPlayer from "react-native-track-player";
 import { PlaybackProvider } from "../context/PlayBackContext";
 import Playback from "./(players)/playback";
 import { PlaybackService } from "../constants/service"; // Ensure correct path
+import OfflineModal from "./OfflineModal";
 
 setupIcons();
 SplashScreen.preventAutoHideAsync();
@@ -42,6 +43,7 @@ export default function App() {
           <Stack.Screen name="notification.click" options={{ headerShown:false }} />
         </Stack>
         <Playback />
+        <OfflineModal />
       </PlaybackProvider>
     </AuthProvider>
   );

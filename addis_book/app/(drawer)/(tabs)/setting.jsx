@@ -6,6 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -21,7 +22,6 @@ import Library from "../../settingTabs/Library";
 import InfoCard from "../../../components/InfoCard";
 import { apiRequest } from "../../../utils/apiRequest";
 import * as ImagePicker from "expo-image-picker";
-import { ScrollView } from "react-native-gesture-handler";
 import SettingHeader from "../../../components/SettingHeader";
 import { load } from "react-native-track-player/lib/src/trackPlayer";
 

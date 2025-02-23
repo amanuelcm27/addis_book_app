@@ -40,7 +40,7 @@ import {
   faDownload,
   faTrash,
   faCircleCheck,
-  faXmark,
+  faFolder,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const setupIcons = () => {
@@ -85,7 +85,7 @@ export const setupIcons = () => {
     faTrash,
     faCircleCheck,
     faRepeat,
-    faVolumeXmark
-    
+    faVolumeXmark,
+    faFolder,
   );
 };

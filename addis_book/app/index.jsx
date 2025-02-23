@@ -41,7 +41,7 @@ const Index = () => {
   if (loading ) {
     return( 
       <View className='h-full bg-primary items-center justify-center'>
-        <Image source={images.logo} className='w-28 h-28'>
+        <Image source={images.logo} className='w-36 h-36'>
 
         </Image>
       </View>
@@ -53,7 +53,7 @@ const Index = () => {
       <SafeAreaView className="h-full bg-[#FF9100]">
         <View className="h-[80%] items-center justify-center">
           <View>
-            <Image source={images.logo} className="w-68 h-68" />
+            <Image source={images.logo} className="w-[400px] h-[400px]" />
           </View>
           <View className="items-center">
             <Text className="text-white text-4xl font-primaryExtraBoldItalic">
@@ -75,7 +75,7 @@ const Index = () => {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-      <StatusBar style="light" />
+      <StatusBar style="light"  backgroundColor="#FF9100"/>
     </>
   );
 };

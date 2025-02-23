@@ -11,12 +11,13 @@ const SideBar = ({ navigation }) => {
   const menuItems = useMemo(
     () => [
       { label: "Account", icon: "fa-user", route: "/setting" },
-      { label: "Genre", icon: "fa-meteor", route: "/search" },
+      { label: "Genres", icon: "fa-meteor", route: "/search" },
       { label: "Authors", icon: "fa-user-pen", route: "/authors" },
       { label: "Narrators", icon: "fa-wave-square", route: "/narrators" },
-      { label: "About us", icon: "fa-users", route: "/aboutus" },
-      { label: "FAQ", icon: "fa-question", route: "/faq" },
-      { label: "Support", icon: "fa-comment", route: "/support" },
+      { label: "Downloads", icon: "fa-folder", route: "/downloads" },
+      // { label: "About us", icon: "fa-users", route: "/aboutus" },
+      // { label: "FAQ", icon: "fa-question", route: "/faq" },
+      // { label: "Support", icon: "fa-comment", route: "/support" },
     ],
     []
   );
