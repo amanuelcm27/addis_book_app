@@ -68,7 +68,7 @@ const Downloads = () => {
         </View>
       ) : (
         <SafeAreaView className="h-full bg-white">
-          <View className="flex-1 mx-4 my-2">
+          <View className="flex-1 mx-4 my-2"> 
             <Text className="font-primaryBlack text-2xl mt-4">Downloads</Text>
             <FlatList
               data={downloadedBooks}

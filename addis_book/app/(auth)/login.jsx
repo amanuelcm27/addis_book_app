@@ -9,7 +9,7 @@ import {
   TextInput,
   BackHandler,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../../constants/images";
 import FormField from "../../components/FormField";
@@ -31,6 +31,8 @@ const login = () => {
   const handleChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
   };
+  const usernameRef = useRef();
+  const passwordRef = useRef();
   const handleLogin = async () => {
     if (!formData.username || !formData.password) {
       setInfo("Please fill in all fields");
@@ -97,21 +99,25 @@ const login = () => {
               </TouchableOpacity>
               <View className="w-full">
                 <FormField
+                  inputRef={usernameRef}
                   onChangeText={(value) => handleChange("username", value)}
                   containerStyle={"mx-6 my-2"}
                   labelStyle={"text-white"}
                   inputContainerStyle={"border-white"}
-                  inputStyle={"text-white"}
+                  inputStyle={"text-white p-2"}
                   label={"username or email"}
                   placeholder={"enter your username or email"}
-                  placeholderColor="rgba(255, 255, 255, .8)"
+                  placeholderColor="rgba(255, 255, 255, 0.8)"
+                  returnKeyType="next"
+                  onSubmitEditing={() => passwordRef.current.focus()}
                 />
                 <FormField
+                  inputRef={passwordRef}
                   onChangeText={(value) => handleChange("password", value)}
                   containerStyle={"mx-6 my-2"}
                   labelStyle={"text-white"}
                   inputContainerStyle={"border-white"}
-                  inputStyle={"text-white"}
+                  inputStyle={"text-white p-2"}
                   label={"Password"}
                   type={"password"}
                   placeholder={"enter your password"}
