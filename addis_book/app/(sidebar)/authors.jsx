@@ -26,7 +26,7 @@ const Authors = () => {
   const [loading, setLoading] = useState(true);
   const [info, setInfo] = useState(null);
   const fetchAuthors = async () => {
-    const response = await apiRequest("get", "/authors");
+    const response = await apiRequest("get", "/authors/");
     if (response.success) {
       setAuthors(response.data);
     } else {
@@ -38,7 +38,7 @@ const Authors = () => {
     setLoading(true);
     const response = await apiRequest(
       "get",
-      `/author-search?author=${searchText}`
+      `/author-search/?author=${searchText}`
     );
     if (response.success) {
       setAuthors(response.data);

@@ -19,7 +19,7 @@ const NarratorDetail = () => {
   const [narrator, setNarrator] = useState({});
   const fetchNarrator = async () => {
     setLoading(true);
-    const response = await apiRequest("get", `/narrator/${narrator_id}`);
+    const response = await apiRequest("get", `/narrator/${narrator_id}/`);
     if (response.success) {
       setNarrator(response.data);
     } else {

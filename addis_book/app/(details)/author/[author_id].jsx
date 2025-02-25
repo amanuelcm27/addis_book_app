@@ -26,7 +26,7 @@ const AuthorDetail = () => {
   const { author_id, currentColor } = useLocalSearchParams();
   const fetchAuthor = async () => {
     setLoading(true);
-    const response = await apiRequest("get", `/author/${author_id}`);
+    const response = await apiRequest("get", `/author/${author_id}/`);
     if (response.success) {
       setAuthor(response.data);
     } else {

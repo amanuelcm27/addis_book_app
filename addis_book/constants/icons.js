@@ -41,6 +41,8 @@ import {
   faTrash,
   faCircleCheck,
   faFolder,
+  faPlus,
+  faEdit,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const setupIcons = () => {
@@ -87,5 +89,7 @@ export const setupIcons = () => {
     faRepeat,
     faVolumeXmark,
     faFolder,
+    faPlus,
+    faEdit,
   );
 };

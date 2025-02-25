@@ -16,7 +16,7 @@ const narrators = () => {
   const [info, setInfo] = useState(null);
   const [narrators, setNarrators] = useState([]);
   const fetchNarrators = async () => {
-    const response = await apiRequest("get", "/narrators");
+    const response = await apiRequest("get", "/narrators/");
     if (response.success) {
       setNarrators(response.data);
     } else {
@@ -28,7 +28,7 @@ const narrators = () => {
     setLoading(true);
     const response = await apiRequest(
       "get",
-      `/narrator-search?narrator=${searchText}`
+      `/narrator-search/?narrator=${searchText}`
     );
     if (response.success) {
       setNarrators(response.data);

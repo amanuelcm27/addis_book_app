@@ -23,7 +23,7 @@ import InfoCard from "../../../components/InfoCard";
 import { apiRequest } from "../../../utils/apiRequest";
 import * as ImagePicker from "expo-image-picker";
 import SettingHeader from "../../../components/SettingHeader";
-import { load } from "react-native-track-player/lib/src/trackPlayer";
+import Content from "../../settingTabs/content";
 
 const Setting = () => {
   const { initialTab } = useLocalSearchParams();
@@ -37,12 +37,15 @@ const Setting = () => {
     { key: "plan", title: "Plan" },
     { key: "library", title: "Library" },
     { key: "downloads", title: "Downloads" },
+    { key: "content" , title:"Content"},
+
   ]);
   const renderScene = SceneMap({
     profile: profile,
     plan: plan,
     downloads: downloads,
     library: Library,
+    content: Content
   });
   const renderTabBar = (props) => (
     <TabBar
@@ -110,7 +113,7 @@ const Setting = () => {
               <FontAwesomeIcon icon="fa-angle-left" size={30} />
             </TouchableOpacity>
             <TouchableOpacity onPress={handleLogout}>
-              <FontAwesomeIcon icon="fa-arrow-right-from-bracket" size={30} />
+              <FontAwesomeIcon icon="fa-arrow-right-from-bracket" color="red"  size={30} />
             </TouchableOpacity>
           </View>
           <SettingHeader
