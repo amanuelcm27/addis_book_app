@@ -9,14 +9,15 @@ import React, { useState } from "react";
 import images from "../../constants/images";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import AuthorBookFormModal from "../../components/AuthorBookFormModal";
+import { useAuth } from "../../context/AuthContext";
 const Content = () => {
-    const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const sampleData = [
     { id: "1", title: "Book Title", uploaded: "Feb 4, 2020" },
     { id: "2", title: "Another Book", uploaded: "Mar 10, 2020" },
-
-
   ];
+  const { user } = useAuth();
+
   return (
     <View className="flex-1 mx-2 relative ">
       <AuthorBookFormModal visible={showModal} onClose={() => setShowModal(false)  } />

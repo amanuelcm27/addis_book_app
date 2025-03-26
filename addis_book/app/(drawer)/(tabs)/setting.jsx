@@ -37,7 +37,7 @@ const Setting = () => {
     { key: "plan", title: "Plan" },
     { key: "library", title: "Library" },
     { key: "downloads", title: "Downloads" },
-    { key: "content" , title:"Content"},
+    ...(user?.author || user?.narrator ? [{ key: "content", title: "Content" }] : []),
 
   ]);
   const renderScene = SceneMap({
