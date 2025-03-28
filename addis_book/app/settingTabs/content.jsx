@@ -5,22 +5,35 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import images from "../../constants/images";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import AuthorBookFormModal from "../../components/AuthorBookFormModal";
 import { useAuth } from "../../context/AuthContext";
+import { apiRequest } from "../../utils/apiRequest";
 const Content = () => {
   const [showModal, setShowModal] = useState(false);
   const sampleData = [
     { id: "1", title: "Book Title", uploaded: "Feb 4, 2020" },
     { id: "2", title: "Another Book", uploaded: "Mar 10, 2020" },
   ];
-  const { user } = useAuth();
 
+  const [genres, setGenres] = useState([]);
+  const fetchGenres = async () => {
+    console.log('called genres')
+    const response = await apiRequest("get", "/genres/");
+    if (response.success) {
+      setGenres(response.data);
+    } else {
+      setInfo(response.error); 
+    }
+  };
+  useEffect(() => {
+    fetchGenres();
+  },[]) 
   return (
     <View className="flex-1 mx-2 relative ">
-      <AuthorBookFormModal visible={showModal} onClose={() => setShowModal(false)  } />
+      <AuthorBookFormModal genres={genres} setShowModal={setShowModal} visible={showModal} onClose={() => setShowModal(false)  } />
       <FlatList
         data={sampleData}
         keyExtractor={(item) => item.id}
