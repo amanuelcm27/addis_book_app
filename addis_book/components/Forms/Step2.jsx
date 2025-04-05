@@ -15,8 +15,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 
-
-
 const Step2 = ({ formData, setFormData }) => {
   const handlePickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -40,8 +38,8 @@ const Step2 = ({ formData, setFormData }) => {
   const handlePickFile = async (field) => {
     const result = await DocumentPicker.getDocumentAsync({
       type: "application/pdf",
+      
     });
-    console.log("result ---", result);
     if (!result.canceled) {
       const selectedFile = result.assets[0];
       setFormData((prevFormData) => ({
@@ -54,10 +52,11 @@ const Step2 = ({ formData, setFormData }) => {
       }));
     }
   };
-  console.log("file --->", formData.ebook, formData.sample_ebook);
+
   const clearField = (field) => {
     setFormData((prevFormData) => ({ ...prevFormData, [field]: null }));
   };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}

@@ -1,3 +1,4 @@
+import { set } from "lodash";
 import React, { useEffect, useState } from "react";
 import {
   Modal,
@@ -12,18 +13,21 @@ import {
   Platform,
 } from "react-native";
 
-
-
-const Step3 = ({ genres }) => {
-  const [selectedGenres, setSelectedGenres] = useState([]);
+const Step3 = ({ genres, setFormData, formData }) => {
   const handleSelectGenre = (genre) => {
-    if (selectedGenres.includes(genre)) {
-      setSelectedGenres((prev) => prev.filter((g) => g !== genre));
+    if (formData.genres.includes(genre)) {
+      setFormData((prev) => ({
+        ...prev,
+        genres: prev.genres.filter((g) => g !== genre),
+      }));
     } else {
-      setSelectedGenres((prev) => [...prev, genre]);
+      setFormData((prev) => ({
+        ...prev,
+        genres: [...prev.genres, genre],
+      }));
     }
   };
-  console.log(selectedGenres);
+  
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -37,7 +41,9 @@ const Step3 = ({ genres }) => {
               <TouchableOpacity
                 onPress={() => handleSelectGenre(genre.id)}
                 key={genre.id}
-                className="p-4 mt-4 h-[50px] items-cente border rounded-lg"
+                className={` p-4 ${
+                  formData.genres.includes(genre.id) ? "bg-gray-200" : ""
+                }  mt-4 h-[50px] items-cente border rounded-lg `}
               >
                 <Text>{genre.name}</Text>
               </TouchableOpacity>

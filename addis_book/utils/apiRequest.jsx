@@ -8,9 +8,9 @@ export const apiRequest = async (method, url, data = null) => {
   } catch (error) {
     const status = error.response?.status;
     const messages = {
-      401: "Invalid credentials, please try again",
+      401: "please try again",
       400: "Bad request, please try again",
     };
-    return { success: false, error: messages[status] || "Network error or something went wrong" };
+    return { success: false, error: messages[status] || "Network error or something went wrong" , error_content: error};
   }
 };

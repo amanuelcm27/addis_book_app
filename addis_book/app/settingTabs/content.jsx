@@ -17,23 +17,28 @@ const Content = () => {
     { id: "1", title: "Book Title", uploaded: "Feb 4, 2020" },
     { id: "2", title: "Another Book", uploaded: "Mar 10, 2020" },
   ];
-
+  const { user } = useAuth();
   const [genres, setGenres] = useState([]);
   const fetchGenres = async () => {
-    console.log('called genres')
     const response = await apiRequest("get", "/genres/");
     if (response.success) {
       setGenres(response.data);
     } else {
-      setInfo(response.error); 
+      setInfo(response.error);
     }
   };
   useEffect(() => {
     fetchGenres();
-  },[]) 
+  }, []);
   return (
     <View className="flex-1 mx-2 relative ">
-      <AuthorBookFormModal genres={genres} setShowModal={setShowModal} visible={showModal} onClose={() => setShowModal(false)  } />
+      <AuthorBookFormModal
+        genres={genres}
+        setShowModal={setShowModal}
+        visible={showModal}
+        onClose={() => setShowModal(false)}
+        user={user}
+      />
       <FlatList
         data={sampleData}
         keyExtractor={(item) => item.id}
@@ -60,7 +65,10 @@ const Content = () => {
           </ImageBackground>
         )}
       />
-      <TouchableOpacity onPress={() => setShowModal(true)} className="absolute bottom-0 right-0 m-4 bg-white shadow-xl rounded-full p-4 ">
+      <TouchableOpacity
+        onPress={() => setShowModal(true)}
+        className="absolute bottom-0 right-0 m-4 bg-white shadow-xl rounded-full p-4 "
+      >
         <FontAwesomeIcon icon="fa-plus" size={20} />
       </TouchableOpacity>
     </View>

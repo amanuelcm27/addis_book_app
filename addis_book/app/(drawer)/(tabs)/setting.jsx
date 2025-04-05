@@ -83,6 +83,7 @@ const Setting = () => {
       name: new Date() + fetchedUser?.username + `.${imageType}`,
       type: `image/${imageType}`,
     });
+    console.log("FormData:", formData);
     setLoading(true);
     const response = await apiRequest("post", "/update_avatar/", formData);
     if (response.success) {
