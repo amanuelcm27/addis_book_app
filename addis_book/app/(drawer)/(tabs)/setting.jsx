@@ -37,7 +37,7 @@ const Setting = () => {
     { key: "plan", title: "Plan" },
     { key: "library", title: "Library" },
     { key: "downloads", title: "Downloads" },
-    ...(user?.author || user?.narrator ? [{ key: "content", title: "Content" }] : []),
+    // ...(user?.author || user?.narrator ? [{ key: "content", title: "Content" }] : []),
 
   ]);
   const renderScene = SceneMap({
@@ -45,7 +45,7 @@ const Setting = () => {
     plan: plan,
     downloads: downloads,
     library: Library,
-    content: Content
+    // content: Content
   });
   const renderTabBar = (props) => (
     <TabBar
